@@ -7,28 +7,34 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Timer;
 
 
-public class Bullet extends Entity{
+public class TriangleProjectile extends Entity{
 
-	private int bulletDamage;
+	private Triangle triangle;
+	
+	private int projectileDamage;
 	private Rectangle bounds;
 	
-	public Bullet() {
+	public TriangleProjectile() {
+		
 		
 	}
 	
-	//Create Bullet Entity
-	public Bullet(float x, float y,Color color, float speed, int damage) {
-		super(x,y,color,speed,0);
-		this.bulletDamage = damage;
+	public TriangleProjectile(Color color, float speed, int damage, Triangle triangle) {
+		//Create TriangleProjectile
+		super(triangle.getX()+50,triangle.getY(),color,speed,damage);
+		this.projectileDamage = damage;
+		this.triangle = triangle;
 		
 	}
 	
-	//Draw Bullet
+	//Draw Projectile
 	public void draw(ShapeRenderer shape) {
 		shape.begin(ShapeRenderer.ShapeType.Filled);
+		if(this.getY()>5) {
 			shape.setColor(this.getColor());
 			shape.rect(this.getX(), this.getY(), 10, 30);
-		shape.end();
+		}
+		shape.end();  
 		//Create Rectangle to detect collisions
         bounds = new Rectangle(this.getX(), this.getY(), 10, 30);
 	}
@@ -38,28 +44,32 @@ public class Bullet extends Entity{
 		return bounds;
 	}
 	
-	//Return BulletDamage
-	public int getBulletDamage() {
-		return bulletDamage;
+	//Return ProjectileDamage
+	public int getProjectileDamage() {
+		return projectileDamage;
 	}
 
-	//Set BulletDamage
-	public void setBulletDamage(int bulletDamage) {
-		this.bulletDamage = bulletDamage;
+	//Set ProjectileDamage
+	public void setProjectileDamage(int projectileDamage) {
+		this.projectileDamage = projectileDamage;
+	}
+
+	public Triangle getTriangle() {
+	    return this.triangle;
 	}
 	
-	//Bullet Movement
+	
 	public void movement() {
-		
+
 	}
 	
-	//Bullet Update
 	public void update() {
 
+
 	}
 	
-	//Bullet Dispose
 	public void dispose() {
-		
+		triangle.dispose();
+		this.dispose();
 	}
 }

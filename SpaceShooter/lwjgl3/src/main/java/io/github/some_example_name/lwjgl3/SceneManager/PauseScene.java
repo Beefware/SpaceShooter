@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.MathUtils;
 public class PauseScene extends Scene{
 
 	private SpriteBatch batch;
-	
     private Texture gameBackground;
     private BitmapFont titleFont, buttonFont;
     private Rectangle resumeButtonBounds, quitButtonBounds;
@@ -35,7 +34,7 @@ public class PauseScene extends Scene{
         buttonFont.setColor(Color.WHITE);
 
         gameBackground = new Texture("space_black.jpg");
-        
+
         resumeButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 80);
         quitButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 100, 400, 80);
     }
@@ -72,12 +71,13 @@ public class PauseScene extends Scene{
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
 
             if (resumeButtonBounds.contains(mouseX, mouseY)) {
-                // Safely check if the current scene is a GameScene and resume it
+                // Get the previously saved GameScene
                 GameScene gameScene = sceneManager.getGameScene();
-                if (gameScene != null) {
-                    gameScene.resumeGame();  // Call the resume method on the correct GameScene
-                    sceneManager.setCurrentScene(gameScene);  // Switch back to the GameScene
-                }
+                // Call the resume method to continue the Game
+                gameScene.resumeGame();  
+                // Switch back to the GameScene
+                sceneManager.setCurrentScene(gameScene);  
+                
             	
             } else if (quitButtonBounds.contains(mouseX, mouseY)) {
                 // Quit to title
@@ -103,5 +103,6 @@ public class PauseScene extends Scene{
         titleFont.dispose();
         buttonFont.dispose();
         gameBackground.dispose();
+
     }
 }

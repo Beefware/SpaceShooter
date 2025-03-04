@@ -9,29 +9,26 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Enemy;
-import io.github.some_example_name.lwjgl3.EntityManager.EnemyBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Player;
-import io.github.some_example_name.lwjgl3.EntityManager.PlayerBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
+import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
 
 public class GameScene extends Scene {
-	
 	private Texture gameBackground;
     private SpriteBatch batch;
     private ShapeRenderer shape;
-    private EntityManager em;
-    private Player player;
-    private Enemy enemy;
-    private PlayerBullet bullet;
-    private EnemyBullet enBullet;
+    private EntityManager entityManager;
+    private Triangle triangle;
+    private Circle circle;
+    private TriangleProjectile trProj;
     private MovementManager movementManager;
     private AudioManager audioManager;
     private SceneManager sceneManager;
     
     private int bgheight=0;
-    
+
     private boolean isPaused = false;  // Flag to track if the game is paused
     
 
@@ -39,19 +36,17 @@ public class GameScene extends Scene {
     	this.sceneManager = sceneManager;
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
-        em = new EntityManager();
+        entityManager = new EntityManager();
         
         // Initialize player, enemy, and bullets
-        player = new Player("Player.png", 200, 5, 0, 3);
-        enemy = new Enemy("Enemy.png", 100, 800, 0, 1);
-        bullet = new PlayerBullet(Color.BLUE, 10, 1, player, enemy);
-        enBullet = new EnemyBullet(Color.RED, 10, 1, player, enemy);
+        triangle = new Triangle("Player.png", 200, 5, 0, 3);
+        circle = new Circle(Color.RED, 120, 650, 50, 0, 1);
+        trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
         
         // Add entities to the EntityManager
-        em.addEntities(player);
-        em.addEntities(enemy);
-        em.addEntities(bullet);
-        em.addEntities(enBullet);
+        entityManager.addEntities(triangle);
+        entityManager.addEntities(circle);
+        entityManager.addEntities(trProj);
         
         gameBackground = new Texture("space_black.jpg");
         
@@ -73,8 +68,8 @@ public class GameScene extends Scene {
 		}
     		
     	if (!isPaused) {
-    		em.draw(batch, shape);
-    		em.update();
+    		entityManager.draw(batch, shape);
+    		entityManager.update();
     	}
     }
     
@@ -85,19 +80,18 @@ public class GameScene extends Scene {
         if (!isPaused) {
 
             // Game logic (e.g., collisions, movement)
-            if (CollisionManager.checkPlayerBulletCollision(bullet, enemy)) {
+            if (CollisionManager.checkTriangleProjectileCollision(trProj, circle)) {
             	// Play explosion sound
             	audioManager.playExplosionSound();
             }
-            CollisionManager.checkEnemyBulletCollision(enBullet, player);
 
-            if (player.getHealth() < 1) {
+            if (triangle.getHealth() < 1) {
             	Scene gameOverScene = new GameOverScene(sceneManager);
             	sceneManager.setCurrentScene(gameOverScene);
             }
             
-            em.movement(movementManager);
-            em.update();
+            entityManager.movement(movementManager);
+            entityManager.update();
         }
         
         // Check for pause input
@@ -106,7 +100,8 @@ public class GameScene extends Scene {
             // Save the reference to the current GameScene
             Scene currentScene = sceneManager.getCurrentScene();
             if (currentScene instanceof GameScene) {
-                sceneManager.setGameScene((GameScene) currentScene);  // Save reference to GameScene
+            	// Save the current GameScene
+                sceneManager.setGameScene((GameScene) currentScene);  
             }
             
             // Switch to the PauseScene

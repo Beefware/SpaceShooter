@@ -19,7 +19,6 @@ public class OptionsScene extends Scene{
 	
     // Title screen variables
 	private SpriteBatch batch;
-	
     private Texture gameBackground;
     private BitmapFont titleFont, buttonFont;
     private Rectangle volumeButtonBounds, backButtonBounds;
@@ -103,6 +102,7 @@ public class OptionsScene extends Scene{
         titleFont.dispose();
         buttonFont.dispose();
         gameBackground.dispose();
+
     }
 
 }

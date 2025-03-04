@@ -1,5 +1,5 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
-
+import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,12 +14,12 @@ import com.badlogic.gdx.math.MathUtils;
 
 
 public class GameOverScene extends Scene {
-	
 	private Texture gameBackground;
     private BitmapFont gameOverFont;
     private Rectangle retryButtonBounds, quitButtonBounds;
     private SpriteBatch batch;
     private SceneManager sceneManager;
+    private int score;  
 
     public GameOverScene(SceneManager sceneManager) {
     	this.sceneManager = sceneManager;
@@ -29,8 +29,8 @@ public class GameOverScene extends Scene {
         retryButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 100, 200, 200, 60);
         quitButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 100, 100, 200, 60);
         batch = new SpriteBatch();
-        
         gameBackground = new Texture("space_black.jpg");
+
     }
 
     @Override
@@ -38,12 +38,21 @@ public class GameOverScene extends Scene {
         ScreenUtils.clear(0, 0, 0.2f, 1);
         batch.begin();
         batch.draw(gameBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+
         // "Game Over" text
         String gameOverText = "GAME OVER";
         GlyphLayout layout = new GlyphLayout(gameOverFont, gameOverText);
         float x = (Gdx.graphics.getWidth() - layout.width) / 2;
         float y = Gdx.graphics.getHeight() / 2 + 100;
         gameOverFont.draw(batch, gameOverText, x, y);
+        // Score text
+        score = Circle.getScore();
+        String scoreText = "Final Score: " + score;
+        GlyphLayout scoreLayout = new GlyphLayout(gameOverFont, scoreText);
+        float scoreX = (Gdx.graphics.getWidth() - scoreLayout.width) / 2;
+        float scoreY = Gdx.graphics.getHeight() / 2 + 50;
+        gameOverFont.draw(batch, scoreText, scoreX, scoreY);
+        
         batch.end();
         // Retry button
         drawButton(retryButtonBounds, "Retry");
@@ -58,9 +67,12 @@ public class GameOverScene extends Scene {
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             
             if (retryButtonBounds.contains(mouseX, mouseY)) {
-            	sceneManager.getGameMaster().resetGame(); // Restart the game
-            	Scene gameScene = new GameScene(sceneManager);
-            	sceneManager.setCurrentScene(gameScene);
+            	// Restart the game
+            	sceneManager.getGameMaster().resetGame(); 
+            	// Switch to the countdown scene
+            	Scene countdownScene = new CountdownScene(sceneManager); 
+                sceneManager.setCurrentScene(countdownScene);
+              // Switch to the Title Screen
             } else if (quitButtonBounds.contains(mouseX, mouseY)) {
             	Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);
@@ -81,5 +93,7 @@ public class GameOverScene extends Scene {
     public void dispose() {
         gameOverFont.dispose();
         batch.dispose();
+        gameBackground.dispose();
+
     }
 }

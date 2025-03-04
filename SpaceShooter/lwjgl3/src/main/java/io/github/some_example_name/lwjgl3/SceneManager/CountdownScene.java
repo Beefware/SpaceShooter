@@ -21,13 +21,12 @@ public class CountdownScene extends Scene {
 
     public CountdownScene(SceneManager sceneManager) {
     	this.sceneManager = sceneManager;
-    	
         timerFont = new BitmapFont();
         timerFont.getData().setScale(3);
         timerFont.setColor(Color.RED);
         batch = new SpriteBatch();
-        
         gameBackground = new Texture("space_black.jpg");
+
     }
 
     @Override
@@ -57,5 +56,7 @@ public class CountdownScene extends Scene {
     public void dispose() {
         timerFont.dispose();
         batch.dispose();
+        gameBackground.dispose();
+
     }
 }

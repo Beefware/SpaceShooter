@@ -2,21 +2,23 @@ package io.github.some_example_name.lwjgl3.EntityManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
-public class Player extends Entity{
+public class Triangle extends Entity{
 	private Texture tex;
 	private Rectangle bounds;
 	private boolean isHit = false;
 	private boolean gameOver = false;
 	
-	public Player() {
+	public Triangle() {
 		
 	}
 	
-	public Player(String string, float x,float y, float speed, int health) {
+	public Triangle(String string, float x,float y, float speed, int health) {
 		//Create Player Entity
 		super(x, y, null, speed, health);
 		tex = new Texture(string);
@@ -27,18 +29,21 @@ public class Player extends Entity{
 	public Texture getTexture() {
 		return tex;
 	}
-
+	
 	//Set Player Texture
 	public void setTexture(Texture tex) {
 		this.tex = tex;
 	}
+
+
 	
 	//Return Rectangle
 	public Rectangle getBounds() {
         return bounds;
 	}
 	
-	//Minus i health if player takes damage (Player and Enemy bullet collision)
+
+	//Minus i health if triangle takes damage (Triangle and CircleProjectile collision)
 	public void damage(int i) {
 		this.setHealth(getHealth()-i);
 		this.setTexture(new Texture("PlayerHealing.png"));
@@ -64,14 +69,14 @@ public class Player extends Entity{
 	
 	//Draw Textures
 	public void draw(SpriteBatch batch) {
-    	batch.begin();
-    		//Draw one health icon for every player health.
-			for(int i=0; i<this.getHealth();i++) {
-				batch.draw(this.getTexture(), 20+i*50,600, this.getTexture().getWidth()/3, this.getTexture().getHeight()/3);
-
-			}
-			//Draw player
-			batch.draw(this.getTexture(), this.getX(), this.getY(), this.getTexture().getWidth(), this.getTexture().getHeight());
+		batch.begin();
+		//Draw one health icon for every player health.
+		for(int i=0; i<this.getHealth();i++) {
+			batch.draw(this.getTexture(), 20+i*50,600, this.getTexture().getWidth()/3, this.getTexture().getHeight()/3);
+	
+		}
+		//Draw player
+		batch.draw(this.getTexture(), this.getX(), this.getY(), this.getTexture().getWidth(), this.getTexture().getHeight());
 		batch.end();
 		
 		//Rectangle of Player for Collision Detection
@@ -81,22 +86,6 @@ public class Player extends Entity{
     }
 	
 	public void movement() {
-		//Only move when Player is alive
-		if(gameOver == false) {
-			//Left and Right Movement
-			if (Gdx.input.isKeyPressed(Keys.LEFT)) this.setX(this.getX()-200 * Gdx.graphics.getDeltaTime());
-			if (Gdx.input.isKeyPressed(Keys.RIGHT)) this.setX(this.getX()+200 * Gdx.graphics.getDeltaTime());
-			//Set max left
-			if (this.getX()<0) { 
-				this.setX(0);
-			}
-			//Set max right
-			if (this.getX()>Gdx.graphics.getWidth()-this.getTexture().getWidth()) {
-				this.setX(Gdx.graphics.getWidth()-this.getTexture().getWidth());
-				
-			
-			}
-		}
 	}
 	
 
@@ -110,7 +99,7 @@ public class Player extends Entity{
 	}
 	
 	public void dispose() {
-		
+		this.dispose();
 	}
 	
 }

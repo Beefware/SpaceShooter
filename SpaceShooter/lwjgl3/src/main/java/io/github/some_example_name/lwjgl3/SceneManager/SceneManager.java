@@ -10,25 +10,23 @@ public class SceneManager {
 
 
     public SceneManager(GameMaster gameMaster) {
-        // Start with the title screen or any initial scene
-    	
-    	this.gameMaster = gameMaster; // Change to the actual GameMaster reference
+    	this.gameMaster = gameMaster;
     }
-
+    // Sets the desired scene
     public void setCurrentScene(Scene scene) {
     	System.out.println("Setting current scene to: " + scene.getClass().getSimpleName());
         this.currentScene = scene;
     }
-    
+    // Gets the current scene
     public Scene getCurrentScene() {
     	System.out.println("Getting current scene to: " + currentScene.getClass().getSimpleName());
         return currentScene;
     }
-    
+    // Sets the game scene
     public void setGameScene(GameScene gameScene) {
         this.gameScene = gameScene;
     }
-    
+    // Gets the game scene
     public GameScene getGameScene() {
         return gameScene;
     }

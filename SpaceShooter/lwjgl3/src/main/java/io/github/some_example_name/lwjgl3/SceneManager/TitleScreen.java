@@ -19,7 +19,6 @@ public class TitleScreen extends Scene{
 	
     // Title screen variables
 	private SpriteBatch batch;
-	
     private Texture gameBackground;
     private BitmapFont titleFont, buttonFont;
     private Rectangle startButtonBounds, optionsButtonBounds, exitButtonBounds;
@@ -27,7 +26,7 @@ public class TitleScreen extends Scene{
     private SceneManager sceneManager;
     
     public TitleScreen(SceneManager sceneManager) {
-        this.sceneManager = sceneManager;  // Assign the SceneManager passed from GameMaster
+        this.sceneManager = sceneManager;  
         
         batch = new SpriteBatch();
 
@@ -67,7 +66,7 @@ public class TitleScreen extends Scene{
         batch.end();
 
         drawButton(startButtonBounds, "Start Game");
-        drawButton(optionsButtonBounds, "Options");
+        //drawButton(optionsButtonBounds, "Options");
         drawButton(exitButtonBounds, "Exit");
         
     }
@@ -79,10 +78,10 @@ public class TitleScreen extends Scene{
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             if (startButtonBounds.contains(mouseX, mouseY)) {
-                // Switch to the countdown scene scene
+                // Switch to the countdown scene
+            	sceneManager.getGameMaster().resetGame();
                 Scene countdownScene = new CountdownScene(sceneManager);
                 sceneManager.setCurrentScene(countdownScene);
-
             } else if (optionsButtonBounds.contains(mouseX, mouseY)) {
                 Scene optionsScene = new OptionsScene(sceneManager);
                 sceneManager.setCurrentScene(optionsScene);
@@ -109,6 +108,7 @@ public class TitleScreen extends Scene{
         titleFont.dispose();
         buttonFont.dispose();
         gameBackground.dispose();
+
     }
 
 }

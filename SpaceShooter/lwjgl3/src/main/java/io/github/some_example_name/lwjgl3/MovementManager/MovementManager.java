@@ -2,85 +2,94 @@ package io.github.some_example_name.lwjgl3.MovementManager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
 
-import io.github.some_example_name.lwjgl3.EntityManager.Enemy;
-import io.github.some_example_name.lwjgl3.EntityManager.EnemyBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.Entity;
-import io.github.some_example_name.lwjgl3.EntityManager.Player;
-import io.github.some_example_name.lwjgl3.EntityManager.PlayerBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
+import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 
 public class MovementManager {
 
     public void moveEntity(Entity entity) {
-        if (entity instanceof Player) {
-            movePlayer((Player) entity);
-        } else if (entity instanceof Enemy) {
-            moveEnemy((Enemy) entity);
-        } else if (entity instanceof PlayerBullet) {
-            movePlayerBullet((PlayerBullet) entity);
-        } else if (entity instanceof EnemyBullet) {
-            moveEnemyBullet((EnemyBullet) entity);
+        if (entity instanceof Triangle) {
+            moveTriangle((Triangle) entity);
+        } else if (entity instanceof Circle) {
+            moveCircle((Circle) entity);
+        } else if (entity instanceof TriangleProjectile) {
+        	moveTriangleProjectile((TriangleProjectile) entity);
         }
     }
 
-    private void movePlayer(Player player) {
-        // Player movement logic
-        if (!player.isGameOver()) {
+    private void moveTriangle(Triangle triangle) {
+        // Triangle movement logic
+        if (!triangle.isGameOver()) {
             if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-                player.setX(player.getX() - 200 * Gdx.graphics.getDeltaTime());
+                triangle.setX(triangle.getX() - 200 * Gdx.graphics.getDeltaTime());
             }
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-                player.setX(player.getX() + 200 * Gdx.graphics.getDeltaTime());
+                triangle.setX(triangle.getX() + 200 * Gdx.graphics.getDeltaTime());
             }
-            // Ensure the player stays within the screen boundaries
-            if (player.getX() < 0) {
-                player.setX(0);
+            // Ensure the Triangle stays within the screen boundaries
+            if (triangle.getX() < 0) {
+                triangle.setX(0);
             }
-            if (player.getX() > Gdx.graphics.getWidth() - player.getTexture().getWidth()) {
-                player.setX(Gdx.graphics.getWidth() - player.getTexture().getWidth());
-            }
-        }
-    }
-
-    private void moveEnemy(Enemy enemy) {
-        // Enemy movement logic
-        if (!enemy.enemyDestroyed()) {
-            // Move enemy downwards if it's above the minimum Y position
-            if (enemy.getY() > 400) { // 400 is used as a default for minY
-                enemy.setY(enemy.getY() - 10);
-            }
-
-         // Check boundaries and toggle direction
-            if (enemy.getX() > Gdx.graphics.getWidth() - enemy.getTexture().getWidth()) {
-                enemy.setMoveRight(false); // Change direction to left
-            } else if (enemy.getX() < 0) {
-                enemy.setMoveRight(true); // Change direction to right
-            }
-
-            // Move horizontally based on the direction
-            if (enemy.isMoveRight()) {
-                enemy.setX(enemy.getX() + 3); // Move right
-            } else {
-                enemy.setX(enemy.getX() - 3); // Move left
+            if (triangle.getX() > Gdx.graphics.getWidth() - triangle.getTexture().getWidth()) {
+                triangle.setX(Gdx.graphics.getWidth() - triangle.getTexture().getWidth());
             }
         }
     }
 
-    private void movePlayerBullet(PlayerBullet bullet) {
-        // PlayerBullet movement logic
-        bullet.setY(bullet.getY() + bullet.getSpeed());
-        if (!bullet.getPlayer().isGameOver() && bullet.getY() > 600) {
-            bullet.setY(bullet.getPlayer().getY() + 70);
-            bullet.setX(bullet.getPlayer().getX() + 50);
+    private void moveCircle(Circle circle) {
+        // Circle movement logic
+        if (!circle.circleHit()) {
+        	circle.setY(circle.getY()-1);
+//            // Move Circle downwards if it's above the minimum Y position
+//            if (circle.getY() > 400) { // 400 is used as a default for minY
+//                circle.setY(circle.getY() - 10);
+//            }
+//
+//         // Check boundaries and toggle direction
+//            if (circle.getX() > Gdx.graphics.getWidth()) {
+//                circle.setMoveRight(false); // Change direction to left
+//            } else if (circle.getX() < 0) {
+//                circle.setMoveRight(true); // Change direction to right
+//            }
+//
+//            // Move horizontally based on the direction
+//            if (circle.isMoveRight()) {
+//                circle.setX(circle.getX() + 3); // Move right
+//            } else {
+//                circle.setX(circle.getX() - 3); // Move left
+//            }
         }
     }
 
-    private void moveEnemyBullet(EnemyBullet bullet) {
-        // EnemyBullet movement logic
-        bullet.setY(bullet.getY() - bullet.getSpeed());
-        if (!bullet.getEnemy().enemyDestroyed() && bullet.getEnemy().getY() < Gdx.graphics.getHeight() && bullet.getY() < 0) {
-            bullet.setY(bullet.getEnemy().getY());
-            bullet.setX(bullet.getEnemy().getX() + 50);
+    private void moveTriangleProjectile(TriangleProjectile projectile) {
+        // TriangleProjectile movement logic
+        if (Gdx.input.isKeyPressed(Keys.SPACE) && projectile.getY()==5) {
+        	projectile.setX(projectile.getTriangle().getX()+50);
+            //projectile.setColor(Color.BLUE);
+
+            projectile.setY(projectile.getY() + projectile.getSpeed());
+        }
+        if(projectile.getY() > 5) {
+            projectile.setY(projectile.getY() + projectile.getSpeed());
+
+        }
+        if (!projectile.getTriangle().isGameOver() && projectile.getY() > 600) {
+            projectile.setY(projectile.getTriangle().getY());
+            projectile.setX(projectile.getTriangle().getX()+50);
         }
     }
+
+//    private void moveCircleProjectile(CircleProjectile projectile) {
+//        // CircleProjectile movement logic
+//        projectile.setY(projectile.getY() - projectile.getSpeed());
+//        if (!projectile.getCircle().circleHit() && projectile.getCircle().getY() < Gdx.graphics.getHeight() && projectile.getY() < 0) {
+//            projectile.setY(projectile.getCircle().getY());
+//            projectile.setX(projectile.getCircle().getX());
+//        }
+//    }
+    
 }

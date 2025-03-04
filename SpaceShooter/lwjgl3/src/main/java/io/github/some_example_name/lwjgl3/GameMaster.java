@@ -10,11 +10,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Enemy;
-import io.github.some_example_name.lwjgl3.EntityManager.EnemyBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Player;
-import io.github.some_example_name.lwjgl3.EntityManager.PlayerBullet;
+import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
+import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
 import io.github.some_example_name.lwjgl3.SceneManager.SceneManager;
 import io.github.some_example_name.lwjgl3.SceneManager.TitleScreen;
@@ -23,19 +22,14 @@ import io.github.some_example_name.lwjgl3.SceneManager.TitleScreen;
 public class GameMaster extends ApplicationAdapter {
     private SpriteBatch batch;
     private ShapeRenderer shape;
-    private Player player;
-    private Enemy enemy;
-    private PlayerBullet bullet;
-    private EnemyBullet enBullet;
-    private EntityManager em;
-    private MovementManager movementManager;
+    private Triangle triangle;
+    private Circle circle;
+    private TriangleProjectile trProj;
+    private EntityManager entityManager;
     private AudioManager audioManager;
     private SceneManager sceneManager;  // SceneManager to handle different scenes
 
     private float countdownTime = 3;
-
-
-
 
     @Override
     public void create() {
@@ -52,21 +46,22 @@ public class GameMaster extends ApplicationAdapter {
      // Add TitleScreen scene to the scene manager
         sceneManager.setCurrentScene(new TitleScreen(sceneManager));
     }
-
+    // Resets the game
     public void resetGame() {
         countdownTime = 3;
-
+        
+        Circle.resetScore();
         // Reinitialize game entities
-        player = new Player("Player.png", 200, 5, 0, 3);
-        enemy = new Enemy("Enemy.png", 100, 800, 0, 1);
-        bullet = new PlayerBullet(Color.BLUE, 10, 1, player, enemy);
-        enBullet = new EnemyBullet(Color.RED, 10, 1, player, enemy);
+        
+        triangle = new Triangle("Player.png", 200, 5, 0, 3);
+        trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
 
-        em = new EntityManager();
-        em.addEntities(player);
-        em.addEntities(enemy);
-        em.addEntities(bullet);
-        em.addEntities(enBullet);
+        circle = new Circle(Color.RED, 120, 650, 50, 0, 1);
+
+        entityManager = new EntityManager();
+        entityManager.addEntities(triangle);
+        entityManager.addEntities(circle);
+        entityManager.addEntities(trProj);
     }
 
     @Override

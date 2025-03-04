@@ -12,7 +12,6 @@ public abstract class Entity {
 	private Color color;
 	private float speed;
 	private int health;
-	private Rectangle bound;
 	
 	public Entity() {
 		
@@ -93,6 +92,11 @@ public abstract class Entity {
 	
 	//abstract void
 	public abstract void update();
+	
+	public void dispose() {
+		this.dispose();
+	}
+	
 	
 }
 
