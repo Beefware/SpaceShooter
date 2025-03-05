@@ -10,9 +10,9 @@ public class CollisionManager {
 
 		//Check if Projectile collides with circle
 	    public static boolean checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
-	    	//If projectile and circle overlap
+	    	//If projectile and left circle overlap
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds1())) {
-	        	//If left circle which was hit is correct option, add a point and reset
+	        	//If left circle is correct option, add a point and reset
 	        	if(circle.isOption1()) {
 	        		 circle.damage();
 
@@ -26,7 +26,7 @@ public class CollisionManager {
 	 	            
 	 	            return true;
 	 	         
-	 	        //If right circle which was hit is wrong option, minus a point from player and continue
+	 	        //If left circle is wrong option, minus a point from player and continue
 	        	}else if(!circle.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
 	        		
@@ -43,9 +43,9 @@ public class CollisionManager {
 	        	}
 	        	
 	        }
-	        
+	    	//If projectile and right circle overlap
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds2())) {
-	        	//If right circle which was hit is correct option, add a point and reset
+	        	//If right circle is correct option, add a point and reset
 	        	if (circle.isOption2()) {
 		            circle.damage();
 		
@@ -59,7 +59,7 @@ public class CollisionManager {
 		            
 	            return true;
 	            
-	 	        //If left circle which was hit is wrong option, minus a point from player and continue
+	 	        //If right circle is wrong option, minus a point from player and continue
 	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
