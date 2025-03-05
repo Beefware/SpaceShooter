@@ -211,12 +211,20 @@ public class Circle extends Entity{
 	public void damage() {
 	    if (!circleHit) {
 	        this.setColor(Color.SALMON);
-	        
 	        score += 1;
 	        randomQuestionGenerator();
 
 	        circleHit = true;
 	    }
+	}
+	
+	public void hitBorder() {
+		 if (!circleHit) {
+		        this.setColor(Color.SALMON);
+		        randomQuestionGenerator();
+
+		        circleHit = true;
+		    }
 	}
 	
 	//Returns if circle is hit or not

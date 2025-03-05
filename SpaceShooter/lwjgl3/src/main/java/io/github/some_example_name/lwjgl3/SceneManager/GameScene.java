@@ -84,6 +84,11 @@ public class GameScene extends Scene {
             	// Play explosion sound
             	audioManager.playExplosionSound();
             }
+            
+            if(CollisionManager.checkCirclesBorderCollision(circle, triangle)) {;
+		    	// Play explosion sound
+		    	audioManager.playExplosionSound();
+            }
 
             if (triangle.getHealth() < 1) {
             	Scene gameOverScene = new GameOverScene(sceneManager);
