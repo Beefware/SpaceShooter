@@ -8,19 +8,64 @@ import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 public class CollisionManager {
 
 	    public static boolean checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
-	        if (triangleProjectile.getBounds().overlaps(circle.getBounds())) {
-	            circle.damage();
+	        if (triangleProjectile.getBounds().overlaps(circle.getBounds1())) {
+	        	if(circle.isOption1()) {
+	        		 circle.damage();
 
-	            // Schedule a task to respawn circle after a 3-second delay
-	            Timer.schedule(new Timer.Task() {
-	                @Override
-	                public void run() {
-	                    circle.respawn();
-	                }
-	            }, 3);
-	            
-	            return true;
+	 	            // Schedule a task to respawn circle after a 3-second delay
+	 	            Timer.schedule(new Timer.Task() {
+	 	                @Override
+	 	                public void run() {
+	 	                    circle.respawn();
+	 	                }
+	 	            }, 2);
+	 	            
+	 	            return true;
+	        	}else if(!circle.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
+	        		triangleProjectile.getTriangle().damage();
+	        		
+	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
+		            Timer.schedule(new Timer.Task() {
+		                @Override
+		                public void run() {
+			        		triangleProjectile.getTriangle().resetDamageFlag();
+		                }
+		            }, 1);
+
+	        		return true;
+
+	        	}
+	        	
 	        }
+	        
+	        if (triangleProjectile.getBounds().overlaps(circle.getBounds2())) {
+	        	if (circle.isOption2()) {
+		            circle.damage();
+		
+		            // Schedule a task to respawn circle after a 3-second delay
+		            Timer.schedule(new Timer.Task() {
+		                @Override
+		                public void run() {
+		                    circle.respawn();
+		                }
+		            }, 2);
+		            
+	            return true;
+	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
+	        		triangleProjectile.getTriangle().damage();
+	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
+		            Timer.schedule(new Timer.Task() {
+		                @Override
+		                public void run() {
+			        		triangleProjectile.getTriangle().resetDamageFlag();
+		                }
+		            }, 1);
+
+	        		return true;
+
+	        	}
+	        }
+
 	        
 	        return false;
 	    }

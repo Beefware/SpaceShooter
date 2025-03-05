@@ -17,8 +17,9 @@ import com.badlogic.gdx.math.MathUtils;
 public class Circle extends Entity{
 	
 	private float radius;
-	private Rectangle bounds;
-	private boolean moveRight=true;
+	private Rectangle option1Bounds;
+	private Rectangle option2Bounds;
+
 	private boolean circleHit = false;
 	
 	private static int score;
@@ -26,8 +27,11 @@ public class Circle extends Entity{
 		
 	private BitmapFont Font;
 	private String questionText;
-	private String correctText;
-	private String  wrongText;
+	private String option1Text;
+	private String  option2Text;
+	private boolean option1Correct;
+	private boolean option2Correct;
+
 
 	
 	public Circle() {
@@ -67,8 +71,10 @@ public class Circle extends Entity{
 		shape.circle(this.getX(), this.getY(), this.getRadius());
 		shape.circle(this.getX()+250, this.getY(), this.getRadius());
 		shape.end();
-		//Rectangle for Collision Detection
-		bounds = new Rectangle(this.getX()-this.getRadius(),this.getY()-this.getRadius(),this.getRadius()*2, this.getRadius()*2);
+		//Rectangles for Collision Detection
+		option1Bounds = new Rectangle(this.getX()-this.getRadius(),this.getY()-this.getRadius(),this.getRadius()*2, this.getRadius()*2);
+		option2Bounds = new Rectangle(this.getX()+250-this.getRadius(),this.getY()-this.getRadius(),this.getRadius()*2, this.getRadius()*2);
+
     }
 	
 	//Draw Circle Sprite and Rectangle
@@ -79,15 +85,15 @@ public class Circle extends Entity{
 	     float questY = 600;
 	     Font.draw(batch,questionText,questX,questY);
 	     
-	     GlyphLayout correctLayout = new GlyphLayout(Font, correctText);
-	     float correctX = this.getX()-correctLayout.width/2;
-	     float correctY = this.getY()+correctLayout.height/2;
-	     Font.draw(batch,correctText,correctX,correctY);
+	     GlyphLayout option1Layout = new GlyphLayout(Font, option1Text);
+	     float option1X = this.getX()-option1Layout.width/2;
+	     float option1Y = this.getY()+option1Layout.height/2;
+	     Font.draw(batch,option1Text,option1X,option1Y);
 	     
-	     GlyphLayout wrongLayout = new GlyphLayout(Font, wrongText);
-	     float wrongX = this.getX()+250-wrongLayout.width/2;
-	     float wrongY = this.getY()+wrongLayout.height/2;
-	     Font.draw(batch,wrongText,wrongX,wrongY);
+	     GlyphLayout option2Layout = new GlyphLayout(Font, option2Text);
+	     float option2X = this.getX()+250-option2Layout.width/2;
+	     float option2Y = this.getY()+option2Layout.height/2;
+	     Font.draw(batch,option2Text,option2X,option2Y);
 	     batch.end();
 
     }
@@ -104,25 +110,30 @@ public class Circle extends Entity{
 		}
 		
 		questionText = (String)correctArray[1];
-		correctText = String.valueOf((int)correctArray[0]);
-		wrongText = String.valueOf((int)wrongArray[0]);
+
+		boolean randomise = MathUtils.randomBoolean();
+		if(randomise) {
+			option1Text = String.valueOf((int)correctArray[0]);
+			option2Text = String.valueOf((int)wrongArray[0]);
+			option1Correct = true;
+			option2Correct = false;
+
+		}else {
+			option1Text = String.valueOf((int)wrongArray[0]);
+			option2Text = String.valueOf((int)correctArray[0]);
+			option1Correct = false;
+			option2Correct = true;
+		}
 
 		System.out.println("Question: " + questionText);
-
-		System.out.println("CorrectOption: " + correctText);
-		System.out.println("WrongOption: " + wrongText);
-
+	    System.out.println("Option1: " + option1Text);
+	    System.out.println("Option2: " + option2Text);
+	    
 	}
-	
-	public int randomNumber() {
-		int randomNumber = MathUtils.random(10);
-		System.out.println("Random number: " + randomNumber);
-		return randomNumber;
-	}
-	
+
 	public Object[] randomCalculator() {
-		int a = randomNumber();
-		int b = randomNumber();
+		int a = MathUtils.random(10);
+		int b = MathUtils.random(10);
 		int operator = MathUtils.random(2);
 		int answer;
 		String question;
@@ -163,20 +174,29 @@ public class Circle extends Entity{
 		
 	}
 	
-	//Returns if Circle is moving right
-	public boolean isMoveRight() {
-        return moveRight;
-    }
-	
-	//Sets Circle to move right
-	public void setMoveRight(boolean moveRight) {
-        this.moveRight = moveRight;
-    }
 	
 	//Return Rectangle
-	public Rectangle getBounds() {
-        return bounds;
+	public Rectangle getBounds1() {
+		
+        return option1Bounds;
+        
 	}
+	
+	//Return Rectangle
+	public Rectangle getBounds2() {
+
+        return option2Bounds;
+	}
+	
+	public boolean isOption1() {
+		return option1Correct;
+	}
+	
+	public boolean isOption2() {
+		return option2Correct;
+	}
+
+
 	
 	//Returns Score
 	public static int getScore() {
@@ -191,6 +211,7 @@ public class Circle extends Entity{
 	public void damage() {
 	    if (!circleHit) {
 	        this.setColor(Color.SALMON);
+	        
 	        score += 1;
 	        randomQuestionGenerator();
 
