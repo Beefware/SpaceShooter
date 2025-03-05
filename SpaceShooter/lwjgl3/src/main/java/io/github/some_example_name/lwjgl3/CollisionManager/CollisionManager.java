@@ -8,8 +8,11 @@ import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 public class CollisionManager {
 
+		//Check if Projectile collides with circle
 	    public static boolean checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
+	    	//If projectile and circle overlap
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds1())) {
+	        	//If left circle which was hit is correct option, add a point and reset
 	        	if(circle.isOption1()) {
 	        		 circle.damage();
 
@@ -22,6 +25,8 @@ public class CollisionManager {
 	 	            }, 2);
 	 	            
 	 	            return true;
+	 	         
+	 	        //If right circle which was hit is wrong option, minus a point from player and continue
 	        	}else if(!circle.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
 	        		
@@ -40,6 +45,7 @@ public class CollisionManager {
 	        }
 	        
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds2())) {
+	        	//If right circle which was hit is correct option, add a point and reset
 	        	if (circle.isOption2()) {
 		            circle.damage();
 		
@@ -52,6 +58,8 @@ public class CollisionManager {
 		            }, 2);
 		            
 	            return true;
+	            
+	 	        //If left circle which was hit is wrong option, minus a point from player and continue
 	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
@@ -71,7 +79,7 @@ public class CollisionManager {
 	        return false;
 	    }
 	    
-	    
+	    //Check if Circles hit Y = 0. (player did not shoot either circles)
 	    public static boolean checkCirclesBorderCollision(Circle circle, Triangle triangle) {
 	    	if(circle.getY()-circle.getRadius()<1 && !triangle.isDamaged()) {
 	    		triangle.damage();
