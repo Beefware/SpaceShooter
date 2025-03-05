@@ -40,7 +40,7 @@ public class GameScene extends Scene {
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
-        circle = new Circle(Color.RED, 120, 650, 50, 0, 1);
+        circle = new Circle(Color.RED, 120, 650, 50, 1, 1);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
         
         // Add entities to the EntityManager

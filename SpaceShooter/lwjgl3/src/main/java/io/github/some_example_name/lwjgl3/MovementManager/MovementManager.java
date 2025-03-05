@@ -43,7 +43,7 @@ public class MovementManager {
     private void moveCircle(Circle circle) {
         // Circle movement logic
         if (!circle.circleHit()) {
-        	circle.setY(circle.getY()-1);
+        	circle.setY(circle.getY()-circle.getSpeed());
 //            // Move Circle downwards if it's above the minimum Y position
 //            if (circle.getY() > 400) { // 400 is used as a default for minY
 //                circle.setY(circle.getY() - 10);

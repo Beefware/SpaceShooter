@@ -124,10 +124,6 @@ public class Circle extends Entity{
 			option1Correct = false;
 			option2Correct = true;
 		}
-
-		System.out.println("Question: " + questionText);
-	    System.out.println("Option1: " + option1Text);
-	    System.out.println("Option2: " + option2Text);
 	    
 	}
 
@@ -196,6 +192,14 @@ public class Circle extends Entity{
 		return option2Correct;
 	}
 
+	public void difficulty() {
+		int speed = Math.floorDiv(score, 5)+1;
+		if(speed>5) {
+			speed =5;
+		}
+		this.setSpeed(speed);
+
+	}
 
 	
 	//Returns Score
@@ -212,8 +216,8 @@ public class Circle extends Entity{
 	    if (!circleHit) {
 	        this.setColor(Color.SALMON);
 	        score += 1;
+	        difficulty();
 	        randomQuestionGenerator();
-
 	        circleHit = true;
 	    }
 	}
