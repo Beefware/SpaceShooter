@@ -31,6 +31,7 @@ public class Circle extends Entity{
 	private String  option2Text;
 	private boolean option1Correct;
 	private boolean option2Correct;
+	private boolean justHitByProjectile = false;
 
 
 	
@@ -242,6 +243,14 @@ public class Circle extends Entity{
 		this.setColor(Color.RED);
 		circleHit=false;
 
+	}
+	
+	public void setJustHitByProjectile(boolean value) {
+	    this.justHitByProjectile = value;
+	}
+
+	public boolean isJustHitByProjectile() {
+	    return justHitByProjectile;
 	}
 
 	//Print out the score and and new random respawn point if circle hit

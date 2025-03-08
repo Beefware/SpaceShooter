@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
+import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager.CollisionResult;
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
@@ -34,6 +35,7 @@ public class GameScene extends Scene {
 
     public GameScene(SceneManager sceneManager) {
     	this.sceneManager = sceneManager;
+    	this.audioManager = sceneManager.getAudioManager();
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         entityManager = new EntityManager();
@@ -51,7 +53,6 @@ public class GameScene extends Scene {
         gameBackground = new Texture("space_black.jpg");
         
         movementManager = new MovementManager();
-        audioManager = new AudioManager();
     }
 
     @Override
@@ -78,18 +79,26 @@ public class GameScene extends Scene {
     @Override
     public void update() {
         if (!isPaused) {
+        	boolean borderCollision = false;
+        	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
+        	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, circle);
+        	
+        	if(projectileCollision == CollisionResult.NO_COLLISION) {
+        		 borderCollision = CollisionManager.checkCirclesBorderCollision(circle, triangle);
+        	}
+        	
+        	if (projectileCollision == CollisionResult.CORRECT_OPTION) {
+        	    System.out.println("Correct answer! Playing 'correct' sound.");
+        	    audioManager.playSoundEffect("correct");
+        	}
+        	else if (projectileCollision == CollisionResult.WRONG_OPTION) {
+        	    System.out.println("Wrong answer! Playing 'wrong' sound.");
+        	    audioManager.playSoundEffect("wrong");
+        	} else if (borderCollision) {
+        		System.out.println("Circle hit the border! Playing 'collision' sound.");
+                audioManager.playSoundEffect("collision");
+        	}
 
-            // Game logic (e.g., collisions, movement)
-            if (CollisionManager.checkTriangleProjectileCollision(trProj, circle)) {
-            	// Play explosion sound
-            	audioManager.playExplosionSound();
-            }
-            
-            
-            if(CollisionManager.checkCirclesBorderCollision(circle, triangle)) {;
-		    	// Play explosion sound
-		    	audioManager.playExplosionSound();
-            }
 
             if (triangle.getHealth() < 1) {
             	Scene gameOverScene = new GameOverScene(sceneManager);

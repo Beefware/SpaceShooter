@@ -8,28 +8,37 @@ import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 public class CollisionManager {
 
+	public enum CollisionResult {
+	    CORRECT_OPTION,
+	    WRONG_OPTION,
+	    NO_COLLISION
+	}
+
+		
+		
 		//Check if Projectile collides with circle
-	    public static boolean checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
+	    public static CollisionResult checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
 	    	//If projectile and left circle overlap
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds1())) {
 	        	//If left circle is correct option, add a point and reset
 	        	if(circle.isOption1()) {
 	        		 circle.damage();
-
+	        		 circle.setJustHitByProjectile(true);
 	 	            // Schedule a task to respawn circle after a 3-second delay
 	 	            Timer.schedule(new Timer.Task() {
 	 	                @Override
 	 	                public void run() {
 	 	                    circle.respawn();
 	 	                }
-	 	            }, 2);
 	 	            
-	 	            return true;
+	 	            }, 2);
+	 	           return CollisionResult.CORRECT_OPTION;
+	 	            
 	 	         
 	 	        //If left circle is wrong option, minus a point from player and continue
 	        	}else if(!circle.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
-	        		
+	        		circle.setJustHitByProjectile(true);
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
@@ -37,8 +46,8 @@ public class CollisionManager {
 			        		triangleProjectile.getTriangle().resetDamageFlag();
 		                }
 		            }, 1);
+		            return CollisionResult.WRONG_OPTION;
 
-	        		return true;
 
 	        	}
 	        	
@@ -47,8 +56,8 @@ public class CollisionManager {
 	        if (triangleProjectile.getBounds().overlaps(circle.getBounds2())) {
 	        	//If right circle is correct option, add a point and reset
 	        	if (circle.isOption2()) {
+	        		circle.setJustHitByProjectile(true);
 		            circle.damage();
-		
 		            // Schedule a task to respawn circle after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
@@ -56,12 +65,13 @@ public class CollisionManager {
 		                    circle.respawn();
 		                }
 		            }, 2);
+		            return CollisionResult.CORRECT_OPTION;
 		            
-	            return true;
 	            
 	 	        //If right circle is wrong option, minus a point from player and continue
-	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
+	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged() && !circle.isJustHitByProjectile()) {
 	        		triangleProjectile.getTriangle().damage();
+	        		circle.setJustHitByProjectile(true);
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
@@ -69,21 +79,19 @@ public class CollisionManager {
 			        		triangleProjectile.getTriangle().resetDamageFlag();
 		                }
 		            }, 1);
-
-	        		return true;
+		            return CollisionResult.WRONG_OPTION;
 
 	        	}
 	        }
-
+	        return CollisionResult.NO_COLLISION;
 	        
-	        return false;
 	    }
 	    
 	    //Check if Circles hit Y = 0. (player did not shoot either circles)
 	    public static boolean checkCirclesBorderCollision(Circle circle, Triangle triangle) {
-	    	if(circle.getY()-circle.getRadius()<1 && !triangle.isDamaged()) {
-	    		triangle.damage();
-	    		circle.hitBorder();
+	    	if(circle.getY()-circle.getRadius()<70 && !triangle.isDamaged()) {
+	    		 triangle.damage();
+	    		 circle.hitBorder();
         		//Schedule a task to reset Triangle damage flag after a 3-second delay
 	            Timer.schedule(new Timer.Task() {
 	                @Override
@@ -92,7 +100,7 @@ public class CollisionManager {
 		    			circle.respawn();
 
 	                }
-	            }, 1);
+	            }, 3);
 
         		return true;
 	    	}

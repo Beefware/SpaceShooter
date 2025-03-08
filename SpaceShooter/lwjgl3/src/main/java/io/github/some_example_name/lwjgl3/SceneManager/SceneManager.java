@@ -2,16 +2,23 @@ package io.github.some_example_name.lwjgl3.SceneManager;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import io.github.some_example_name.lwjgl3.GameMaster;
+import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 
 public class SceneManager {
     private Scene currentScene;
     private GameMaster gameMaster;
     private GameScene gameScene; // Store reference to GameScene
+    private AudioManager audioManager;
 
-
-    public SceneManager(GameMaster gameMaster) {
+    public SceneManager(GameMaster gameMaster, AudioManager audioManager) {
     	this.gameMaster = gameMaster;
+    	this.audioManager = audioManager;
     }
+    
+    public AudioManager getAudioManager() {
+    	return audioManager;
+    }
+    
     // Sets the desired scene
     public void setCurrentScene(Scene scene) {
     	System.out.println("Setting current scene to: " + scene.getClass().getSimpleName());

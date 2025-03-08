@@ -9,6 +9,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
+import io.github.some_example_name.lwjgl3.AudioManager.MusicPlayer;
+import io.github.some_example_name.lwjgl3.AudioManager.SoundEffect;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
@@ -38,10 +40,21 @@ public class GameMaster extends ApplicationAdapter {
         
         // Initialize the AudioManager and play background music
         audioManager = new AudioManager();
+        MusicPlayer backgroundMusic = new MusicPlayer("background_music.wav");
+        audioManager.setBackgroundMusic(backgroundMusic);
         audioManager.playBackgroundMusic();
-        
-        
-        sceneManager = new SceneManager(this);
+        // Load sound effects
+        SoundEffect correctSound = new SoundEffect("correct.wav");
+        SoundEffect wrongSound = new SoundEffect("wrong.wav");
+        SoundEffect collisionSound = new SoundEffect("impacteffect.wav");
+        audioManager.addSoundEffect("correct", correctSound);
+        audioManager.addSoundEffect("wrong", wrongSound);
+        audioManager.addSoundEffect("collision", collisionSound);
+        System.out.println("Loaded sound effects:");
+        for (String key : audioManager.getSoundEffects().keySet()) {
+            System.out.println("- " + key);
+        }
+        sceneManager = new SceneManager(this, audioManager);
         
      // Add TitleScreen scene to the scene manager
         sceneManager.setCurrentScene(new TitleScreen(sceneManager));

@@ -1,65 +1,76 @@
 package io.github.some_example_name.lwjgl3.AudioManager;
 
 // Add necessary imports
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.Gdx;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AudioManager {
-	 private Music backgroundMusic;  // For background music
-	 private Sound impactSound;   // For impact sound upon collision
+	 private IAudioPlayer backgroundMusic;  // For background music
+	 private Map<String, ISoundEffect> soundEffects;
 	 private float musicVolume;      // Volume control for background music
 	 private float soundVolume;      // Volume control for sound effects
 	 
 	 // Audio Manager Constructor
 	 public AudioManager() {
-		 musicVolume = 0.5f; // Default music volume
-		 soundVolume = 1.0f; // Default sound volume
-		 
-		 // Loading audio filess
-	     backgroundMusic = Gdx.audio.newMusic(Gdx.files.internal("scifi-intro.mp3"));
-	     impactSound = Gdx.audio.newSound(Gdx.files.internal("impacteffect.wav"));
-	     
-	     // Set background music properties
-	     backgroundMusic.setLooping(true);  // Loop indefinitely
-	     backgroundMusic.setVolume(musicVolume);  // Set default volume
-	     
+		 System.out.println("AudioManager created!");
+		 this.musicVolume = 1.0f; // Default music volume
+		 this.soundVolume = 1.0f; // Default sound volume
+		 this.soundEffects = new HashMap<>();	     
 	 }
+	 
+	// Set Background Music
+	    public void setBackgroundMusic(IAudioPlayer musicPlayer) {
+	        if (this.backgroundMusic != null) {
+	            this.backgroundMusic.dispose(); // Dispose previous music if any
+	        }
+	        this.backgroundMusic = musicPlayer;
+	        this.backgroundMusic.setVolume(musicVolume);
+	    }
 	 
 	 // Play background music if its not already playing
 	 public void playBackgroundMusic() {
-		 if (!backgroundMusic.isPlaying()) {
+		 if (backgroundMusic != null) {
 			 backgroundMusic.play();  // Play music
 	     }
 	 }
 	 
 	// Stop background music
 	public void stopBackgroundMusic() {
-		if (backgroundMusic.isPlaying()) {
+		if (backgroundMusic != null) {
 			backgroundMusic.stop();  // Stop music
 	    }
 	}
 	
-	// Play explosion sound
-    public void playExplosionSound() {
-        impactSound.play(soundVolume);  // Play impact sound with volume control upon collision detection
+	// Add Sound Effect
+    public void addSoundEffect(String name, ISoundEffect soundEffect) {
+        soundEffects.put(name, soundEffect);
     }
     
-    // Adjust music volume
-    public void setMusicVolume(float volume) {
-        musicVolume = volume;
-        backgroundMusic.setVolume(musicVolume);  // Apply set volume to the background music
+    // Play a Sound Effect
+    public void playSoundEffect(String name) {
+        ISoundEffect soundEffect = soundEffects.get(name);
+        if (soundEffect != null) {
+        	System.out.println("Playing sound: " + name);
+            soundEffect.play(soundVolume);
+        } else {
+        	System.err.println("Sound effect not found: " + name);
+        }
     }
     
- // Adjust sound effects volume
-    public void setSoundVolume(float volume) {
-        soundVolume = volume; // Apply set volume to the sound effect
+    // Get Loaded Sound Effects
+    public Map<String, ISoundEffect> getSoundEffects() {
+        return soundEffects;
     }
 
-    // Dispose of the audio resources when no longer needed
+    // Dispose all audio resources
     public void dispose() {
-        backgroundMusic.dispose();  // Dispose of background music resource
-        impactSound.dispose();   // Dispose of impact sound resource
+        if (backgroundMusic != null) {
+            backgroundMusic.dispose();
+        }
+        for (ISoundEffect effect : soundEffects.values()) {
+            effect.dispose();
+        }
+        soundEffects.clear();
     }
 	
 }
