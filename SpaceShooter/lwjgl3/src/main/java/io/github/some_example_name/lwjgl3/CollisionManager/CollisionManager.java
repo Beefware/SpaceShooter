@@ -69,7 +69,7 @@ public class CollisionManager {
 		            
 	            
 	 	        //If right mOptions is wrong option, minus a point from player and continue
-	        	}else if(!mOptions.isOption2() && !triangleProjectile.getTriangle().isDamaged() && !mOptions.isJustHitByProjectile()) {
+	        	}else if(!mOptions.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
 	        		mOptions.setJustHitByProjectile(true);
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
