@@ -18,9 +18,11 @@ public class CountdownScene extends Scene {
     private BitmapFont timerFont;
     private SpriteBatch batch;
     private SceneManager sceneManager;
+    private int topic;
 
-    public CountdownScene(SceneManager sceneManager) {
+    public CountdownScene(SceneManager sceneManager, int topic) {
     	this.sceneManager = sceneManager;
+    	this.topic = topic;
         timerFont = new BitmapFont();
         timerFont.getData().setScale(3);
         timerFont.setColor(Color.RED);
@@ -48,8 +50,9 @@ public class CountdownScene extends Scene {
         countdownTime -= Gdx.graphics.getDeltaTime();
         if (countdownTime <= 0) {
             // Transition to the game scene
-            Scene gameScene = new GameScene(sceneManager);
+            Scene gameScene = new GameScene(sceneManager, topic);
             sceneManager.setCurrentScene(gameScene);
+            System.out.println("Topic:" + topic);
         }
     }
 

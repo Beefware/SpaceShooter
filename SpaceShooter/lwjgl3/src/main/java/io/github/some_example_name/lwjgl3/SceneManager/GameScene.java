@@ -3,6 +3,8 @@ package io.github.some_example_name.lwjgl3.SceneManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -28,22 +30,29 @@ public class GameScene extends Scene {
     private MovementManager movementManager;
     private AudioManager audioManager;
     private SceneManager sceneManager;
+    private BitmapFont scoreFont;
+    private int score;
+    private int topic;
     
     private int bgheight=0;
 
     private boolean isPaused = false;  // Flag to track if the game is paused
     
 
-    public GameScene(SceneManager sceneManager) {
+    public GameScene(SceneManager sceneManager, int topic) {
     	this.sceneManager = sceneManager;
     	this.audioManager = sceneManager.getAudioManager();
+    	this.topic = topic;
+        scoreFont = new BitmapFont();
+        scoreFont.getData().setScale(2);
+        scoreFont.setColor(Color.RED);
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         entityManager = new EntityManager();
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
-        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1);
+        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1, topic);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
         
         // Add entities to the EntityManager
@@ -63,6 +72,14 @@ public class GameScene extends Scene {
     	batch.begin();
 		batch.draw(gameBackground, 0, bgheight, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 		batch.draw(gameBackground, 0, bgheight+630, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+		
+        score = MathOptions.getScore();
+        String scoreText = "Score: " + score;
+        GlyphLayout scoreLayout = new GlyphLayout(scoreFont, scoreText);
+        float scoreX = (Gdx.graphics.getWidth() - scoreLayout.width) - 10;
+        float scoreY = Gdx.graphics.getHeight() - 10;
+        scoreFont.draw(batch, scoreText, scoreX, scoreY);
+		
 		batch.end();
 		bgheight-=1;
 		if(bgheight<-630) {
@@ -79,6 +96,7 @@ public class GameScene extends Scene {
     
     @Override
     public void update() {
+    	
         if (!isPaused) {
         	boolean borderCollision = false;
         	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
@@ -102,7 +120,7 @@ public class GameScene extends Scene {
 
 
             if (triangle.getHealth() < 1) {
-            	Scene gameOverScene = new GameOverScene(sceneManager);
+            	Scene gameOverScene = new GameOverScene(sceneManager, topic);
             	sceneManager.setCurrentScene(gameOverScene);
             }
             

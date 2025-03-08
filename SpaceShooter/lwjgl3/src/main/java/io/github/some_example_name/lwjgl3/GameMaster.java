@@ -70,7 +70,6 @@ public class GameMaster extends ApplicationAdapter {
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
 
-        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1);
 
         entityManager = new EntityManager();
         entityManager.addEntities(triangle);

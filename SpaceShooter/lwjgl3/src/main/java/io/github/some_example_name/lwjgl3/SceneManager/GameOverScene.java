@@ -21,10 +21,12 @@ public class GameOverScene extends Scene {
     private Rectangle retryButtonBounds, quitButtonBounds;
     private SpriteBatch batch;
     private SceneManager sceneManager;
-    private int score;  
+    private int score;
+    private int topic;
 
-    public GameOverScene(SceneManager sceneManager) {
+    public GameOverScene(SceneManager sceneManager, int topic) {
     	this.sceneManager = sceneManager;
+    	this.topic = topic;
         gameOverFont = new BitmapFont();
         gameOverFont.getData().setScale(3);
         gameOverFont.setColor(Color.RED);
@@ -72,7 +74,7 @@ public class GameOverScene extends Scene {
             	// Restart the game
             	sceneManager.getGameMaster().resetGame(); 
             	// Switch to the countdown scene
-            	Scene countdownScene = new CountdownScene(sceneManager); 
+            	Scene countdownScene = new CountdownScene(sceneManager, topic); 
                 sceneManager.setCurrentScene(countdownScene);
               // Switch to the Title Screen
             } else if (quitButtonBounds.contains(mouseX, mouseY)) {

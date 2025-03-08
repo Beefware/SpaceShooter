@@ -78,10 +78,10 @@ public class TitleScreen extends Scene{
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             if (startButtonBounds.contains(mouseX, mouseY)) {
-                // Switch to the countdown scene
+                // Switch to the topic scene
             	sceneManager.getGameMaster().resetGame();
-                Scene countdownScene = new CountdownScene(sceneManager);
-                sceneManager.setCurrentScene(countdownScene);
+                Scene topicScene = new TopicScene(sceneManager);
+                sceneManager.setCurrentScene(topicScene);
             } else if (optionsButtonBounds.contains(mouseX, mouseY)) {
                 Scene optionsScene = new OptionsScene(sceneManager);
                 sceneManager.setCurrentScene(optionsScene);

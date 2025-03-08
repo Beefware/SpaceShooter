@@ -15,17 +15,18 @@ import com.badlogic.gdx.math.MathUtils;
 
 
 
-public class OptionsScene extends Scene{
+public class TopicScene extends Scene{
 	
-    // Options screen variables
+    // Topic screen variables
 	private SpriteBatch batch;
     private Texture gameBackground;
     private BitmapFont titleFont, buttonFont;
-    private Rectangle volumeButtonBounds, backButtonBounds;
-    private float buttonAnimationTime = 0;
     private SceneManager sceneManager;
+    private float buttonAnimationTime = 0;
+    private Rectangle additionButtonBounds, subtractionButtonBounds, multiplicationButtonBounds, divisionButtonBounds, randomButtonBounds;
     
-    public OptionsScene(SceneManager sceneManager) {
+    
+    public TopicScene(SceneManager sceneManager) {
         this.sceneManager = sceneManager;  // Assign the SceneManager passed from GameMaster
         
         batch = new SpriteBatch();
@@ -41,9 +42,16 @@ public class OptionsScene extends Scene{
         gameBackground = new Texture("space_black.jpg");
 
         // Button positions
-        volumeButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 80);
+        additionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 350, 400, 30);
         
-        backButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 100, 400, 80);
+        subtractionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 300, 400, 30);
+        
+        multiplicationButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 250, 400, 30);
+        
+        divisionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 30);
+        
+        randomButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 150, 400, 30);
+    
     }
     
     @Override
@@ -65,8 +73,11 @@ public class OptionsScene extends Scene{
         
         batch.end();
 
-        drawButton(volumeButtonBounds, "Volume");
-        drawButton(backButtonBounds, "Back");
+        drawButton(additionButtonBounds, "Addition");
+        drawButton(subtractionButtonBounds, "Subtraction");
+        drawButton(multiplicationButtonBounds, "Multiplication");
+        drawButton(divisionButtonBounds, "Division");
+        drawButton(randomButtonBounds, "Random");
         
     }
     
@@ -76,11 +87,21 @@ public class OptionsScene extends Scene{
         if (Gdx.input.justTouched()) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            if (volumeButtonBounds.contains(mouseX, mouseY)) {
-                
-            } else if (backButtonBounds.contains(mouseX, mouseY)) {
-            	Scene titleScene = new TitleScreen(sceneManager);
-                sceneManager.setCurrentScene(titleScene);
+            if (additionButtonBounds.contains(mouseX, mouseY)) {
+            	Scene countdownScene = new CountdownScene(sceneManager, 1);
+                sceneManager.setCurrentScene(countdownScene);
+            } else if (subtractionButtonBounds.contains(mouseX, mouseY)) {
+            	Scene countdownScene = new CountdownScene(sceneManager, 2);
+                sceneManager.setCurrentScene(countdownScene);
+            } else if (multiplicationButtonBounds.contains(mouseX, mouseY)) {
+            	Scene countdownScene = new CountdownScene(sceneManager, 3);
+                sceneManager.setCurrentScene(countdownScene);
+            } else if (divisionButtonBounds.contains(mouseX, mouseY)) {
+            	Scene countdownScene = new CountdownScene(sceneManager, 4);
+                sceneManager.setCurrentScene(countdownScene);
+            } else if (randomButtonBounds.contains(mouseX, mouseY)) {
+            	Scene countdownScene = new CountdownScene(sceneManager, 5);
+                sceneManager.setCurrentScene(countdownScene);
             }
         }
     	

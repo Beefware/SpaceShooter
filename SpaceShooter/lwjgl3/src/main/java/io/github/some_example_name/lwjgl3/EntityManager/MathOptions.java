@@ -27,20 +27,23 @@ public class MathOptions extends Circle {
     private String option2Text;
     private boolean option1Correct;
     private boolean option2Correct;
+    private int topic;
 
     public MathOptions() {
     }
 
-    public MathOptions(String string, float x, float y, float speed, int health) {
+    public MathOptions(String string, float x, float y, float speed, int health, int topic) {
         super(null, x / 4, y, 0, speed, health);
 
         this.tex = new Texture(string);
+        this.topic = topic;
 
         Font = new BitmapFont();
         Font.getData().setScale(3);
         Font.setColor(Color.YELLOW);
 
-        randomQuestionGenerator(5); // Default to ALL
+        randomQuestionGenerator(topic);
+        
     }
 
     public Texture getTexture() {
@@ -221,7 +224,7 @@ public class MathOptions extends Circle {
             this.setColor(Color.SALMON);
             score += 1;
             difficulty();
-            randomQuestionGenerator(5); //Default to all
+            randomQuestionGenerator(topic);
             circleHit = true;
         }
     }
@@ -229,7 +232,7 @@ public class MathOptions extends Circle {
     public void hitBorder() {
         if (!circleHit) {
             this.setColor(Color.SALMON);
-            randomQuestionGenerator(5);//Default to all
+            randomQuestionGenerator(topic);
             circleHit = true;
         }
     }
