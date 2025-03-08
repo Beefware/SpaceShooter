@@ -14,6 +14,7 @@ import io.github.some_example_name.lwjgl3.AudioManager.SoundEffect;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
@@ -25,7 +26,7 @@ public class GameMaster extends ApplicationAdapter {
     private SpriteBatch batch;
     private ShapeRenderer shape;
     private Triangle triangle;
-    private Circle circle;
+    private MathOptions mOptions;
     private TriangleProjectile trProj;
     private EntityManager entityManager;
     private AudioManager audioManager;
@@ -63,17 +64,17 @@ public class GameMaster extends ApplicationAdapter {
     public void resetGame() {
         countdownTime = 3;
         
-        Circle.resetScore();
+        MathOptions.resetScore();
         // Reinitialize game entities
         
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
 
-        circle = new Circle(Color.RED, 120, 650, 50, 0, 1);
+        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1);
 
         entityManager = new EntityManager();
         entityManager.addEntities(triangle);
-        entityManager.addEntities(circle);
+        entityManager.addEntities(mOptions);
         entityManager.addEntities(trProj);
     }
 

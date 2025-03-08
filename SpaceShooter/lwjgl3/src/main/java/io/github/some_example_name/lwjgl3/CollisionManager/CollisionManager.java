@@ -3,7 +3,7 @@ package io.github.some_example_name.lwjgl3.CollisionManager;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Timer;
 
-import io.github.some_example_name.lwjgl3.EntityManager.Circle;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 public class CollisionManager {
@@ -16,29 +16,29 @@ public class CollisionManager {
 
 		
 		
-		//Check if Projectile collides with circle
-	    public static CollisionResult checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, Circle circle) {
-	    	//If projectile and left circle overlap
-	        if (triangleProjectile.getBounds().overlaps(circle.getBounds1())) {
-	        	//If left circle is correct option, add a point and reset
-	        	if(circle.isOption1()) {
-	        		 circle.damage();
-	        		 circle.setJustHitByProjectile(true);
-	 	            // Schedule a task to respawn circle after a 3-second delay
+		//Check if Projectile collides with mOptions
+	    public static CollisionResult checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, MathOptions mOptions) {
+	    	//If projectile and left mOptions overlap
+	        if (triangleProjectile.getBounds().overlaps(mOptions.getBounds1())) {
+	        	//If left mOptions is correct option, add a point and reset
+	        	if(mOptions.isOption1()) {
+	        		 mOptions.damage();
+	        		 mOptions.setJustHitByProjectile(true);
+	 	            // Schedule a task to respawn mOptions after a 3-second delay
 	 	            Timer.schedule(new Timer.Task() {
 	 	                @Override
 	 	                public void run() {
-	 	                    circle.respawn();
+	 	                    mOptions.respawn();
 	 	                }
 	 	            
 	 	            }, 2);
 	 	           return CollisionResult.CORRECT_OPTION;
 	 	            
 	 	         
-	 	        //If left circle is wrong option, minus a point from player and continue
-	        	}else if(!circle.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
+	 	        //If left mOptions is wrong option, minus a point from player and continue
+	        	}else if(!mOptions.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
 	        		triangleProjectile.getTriangle().damage();
-	        		circle.setJustHitByProjectile(true);
+	        		mOptions.setJustHitByProjectile(true);
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
@@ -52,26 +52,26 @@ public class CollisionManager {
 	        	}
 	        	
 	        }
-	    	//If projectile and right circle overlap
-	        if (triangleProjectile.getBounds().overlaps(circle.getBounds2())) {
-	        	//If right circle is correct option, add a point and reset
-	        	if (circle.isOption2()) {
-	        		circle.setJustHitByProjectile(true);
-		            circle.damage();
-		            // Schedule a task to respawn circle after a 3-second delay
+	    	//If projectile and right mOptions overlap
+	        if (triangleProjectile.getBounds().overlaps(mOptions.getBounds2())) {
+	        	//If right mOptions is correct option, add a point and reset
+	        	if (mOptions.isOption2()) {
+	        		mOptions.setJustHitByProjectile(true);
+		            mOptions.damage();
+		            // Schedule a task to respawn mOptions after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
 		                public void run() {
-		                    circle.respawn();
+		                    mOptions.respawn();
 		                }
 		            }, 2);
 		            return CollisionResult.CORRECT_OPTION;
 		            
 	            
-	 	        //If right circle is wrong option, minus a point from player and continue
-	        	}else if(!circle.isOption2() && !triangleProjectile.getTriangle().isDamaged() && !circle.isJustHitByProjectile()) {
+	 	        //If right mOptions is wrong option, minus a point from player and continue
+	        	}else if(!mOptions.isOption2() && !triangleProjectile.getTriangle().isDamaged() && !mOptions.isJustHitByProjectile()) {
 	        		triangleProjectile.getTriangle().damage();
-	        		circle.setJustHitByProjectile(true);
+	        		mOptions.setJustHitByProjectile(true);
 	        		//Schedule a task to reset Triangle damage flag after a 3-second delay
 		            Timer.schedule(new Timer.Task() {
 		                @Override
@@ -87,17 +87,17 @@ public class CollisionManager {
 	        
 	    }
 	    
-	    //Check if Circles hit Y = 0. (player did not shoot either circles)
-	    public static boolean checkCirclesBorderCollision(Circle circle, Triangle triangle) {
-	    	if(circle.getY()-circle.getRadius()<70 && !triangle.isDamaged()) {
-	    		 triangle.damage();
-	    		 circle.hitBorder();
+	    //Check if mOptionss hit Y = 0. (player did not shoot either mOptionss)
+	    public static boolean checkCirclesBorderCollision(MathOptions mOptions, Triangle triangle) {
+	    	if(mOptions.getY()<60 && !triangle.isDamaged()) {
+	    		triangle.damage();
+	    		 mOptions.hitBorder();
         		//Schedule a task to reset Triangle damage flag after a 3-second delay
 	            Timer.schedule(new Timer.Task() {
 	                @Override
 	                public void run() {
 		        		triangle.resetDamageFlag();
-		    			circle.respawn();
+		    			mOptions.respawn();
 
 	                }
 	            }, 3);
@@ -112,9 +112,9 @@ public class CollisionManager {
 
 
 
-//	    public static boolean checkCircleProjectileCollision(CircleProjectile circleProjectile, Triangle triangle) {
-//	        if (circleProjectile.getBounds().overlaps(triangle.getBounds()) && !triangle.isDamaged()) {
-//	            triangle.damage(circleProjectile.getProjectileDamage());
+//	    public static boolean checkmOptionsProjectileCollision(mOptionsProjectile mOptionsProjectile, Triangle triangle) {
+//	        if (mOptionsProjectile.getBounds().overlaps(triangle.getBounds()) && !triangle.isDamaged()) {
+//	            triangle.damage(mOptionsProjectile.getProjectileDamage());
 //
 //	            // Schedule a task to reset Triangle damage flag after a 3-second delay
 //	            Timer.schedule(new Timer.Task() {

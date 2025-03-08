@@ -12,6 +12,7 @@ import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager.CollisionResult;
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
@@ -22,7 +23,7 @@ public class GameScene extends Scene {
     private ShapeRenderer shape;
     private EntityManager entityManager;
     private Triangle triangle;
-    private Circle circle;
+    private MathOptions mOptions;
     private TriangleProjectile trProj;
     private MovementManager movementManager;
     private AudioManager audioManager;
@@ -42,12 +43,12 @@ public class GameScene extends Scene {
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
-        circle = new Circle(Color.RED, 120, 650, 50, 1, 1);
+        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
         
         // Add entities to the EntityManager
         entityManager.addEntities(triangle);
-        entityManager.addEntities(circle);
+        entityManager.addEntities(mOptions);
         entityManager.addEntities(trProj);
         
         gameBackground = new Texture("space_black.jpg");
@@ -81,10 +82,10 @@ public class GameScene extends Scene {
         if (!isPaused) {
         	boolean borderCollision = false;
         	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
-        	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, circle);
+        	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, mOptions);
         	
         	if(projectileCollision == CollisionResult.NO_COLLISION) {
-        		 borderCollision = CollisionManager.checkCirclesBorderCollision(circle, triangle);
+        		 borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
         	}
         	
         	if (projectileCollision == CollisionResult.CORRECT_OPTION) {

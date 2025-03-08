@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.Entity;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 
@@ -14,8 +15,8 @@ public class MovementManager {
     public void moveEntity(Entity entity) {
         if (entity instanceof Triangle) {
             moveTriangle((Triangle) entity);
-        } else if (entity instanceof Circle) {
-            moveCircle((Circle) entity);
+        } else if (entity instanceof MathOptions) {
+            moveCircle((MathOptions) entity);
         } else if (entity instanceof TriangleProjectile) {
         	moveTriangleProjectile((TriangleProjectile) entity);
         }
@@ -40,10 +41,10 @@ public class MovementManager {
         }
     }
 
-    private void moveCircle(Circle circle) {
+    private void moveCircle(MathOptions mOptions) {
         // Circle movement logic
-        if (!circle.circleHit()) {
-        	circle.setY(circle.getY()-circle.getSpeed());
+        if (!mOptions.circleHit()) {
+        	mOptions.setY(mOptions.getY()-mOptions.getSpeed());
 //            // Move Circle downwards if it's above the minimum Y position
 //            if (circle.getY() > 400) { // 400 is used as a default for minY
 //                circle.setY(circle.getY() - 10);

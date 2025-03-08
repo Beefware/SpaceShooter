@@ -1,5 +1,7 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -46,7 +48,7 @@ public class GameOverScene extends Scene {
         float y = Gdx.graphics.getHeight() / 2 + 100;
         gameOverFont.draw(batch, gameOverText, x, y);
         // Score text
-        score = Circle.getScore();
+        score = MathOptions.getScore();
         String scoreText = "Final Score: " + score;
         GlyphLayout scoreLayout = new GlyphLayout(gameOverFont, scoreText);
         float scoreX = (Gdx.graphics.getWidth() - scoreLayout.width) / 2;
