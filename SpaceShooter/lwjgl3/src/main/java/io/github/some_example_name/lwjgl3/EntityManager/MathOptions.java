@@ -116,7 +116,7 @@ public class MathOptions extends Circle {
 		public Object[] randomCalculator() {
 			int a = MathUtils.random(10);
 			int b = MathUtils.random(10);
-			int operator = MathUtils.random(2);
+			int operator = MathUtils.random(3);
 			int answer;
 			String question;
 			switch(operator) {
@@ -136,6 +136,11 @@ public class MathOptions extends Circle {
 				case 2: 
 					answer= a * b;
 					question = a + " x " + b;
+					break;
+				case 3:
+					int div = a * b;
+					answer = b;
+					question = div + " / " + a;
 					break;
 				default: 
 					answer= a + b;
