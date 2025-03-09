@@ -1,6 +1,7 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
 
 import com.badlogic.gdx.Gdx;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -12,12 +13,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager.CollisionResult;
-import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupManager;
+import io.github.some_example_name.lwjgl3.PowerupManager.ExtraLife;
 
 public class GameScene extends Scene {
 	private Texture gameBackground;
@@ -30,6 +32,7 @@ public class GameScene extends Scene {
     private MovementManager movementManager;
     private AudioManager audioManager;
     private SceneManager sceneManager;
+    private PowerupManager powerupManager;
     private BitmapFont scoreFont;
     private int score;
     private int topic;
@@ -49,6 +52,7 @@ public class GameScene extends Scene {
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         entityManager = new EntityManager();
+        powerupManager = new PowerupManager();
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
@@ -89,6 +93,8 @@ public class GameScene extends Scene {
     	if (!isPaused) {
     		entityManager.draw(batch, shape);
     		entityManager.update();
+    		
+    		powerupManager.render(batch); 
     	}
     }
     
@@ -126,6 +132,10 @@ public class GameScene extends Scene {
             
             entityManager.movement(movementManager);
             entityManager.update();
+            
+            powerupManager.update(Gdx.graphics.getDeltaTime());
+            powerupManager.checkCollision(triangle, trProj);
+
         }
         
         // Check for pause input
@@ -153,7 +163,9 @@ public class GameScene extends Scene {
         batch.dispose();
         shape.dispose();
         gameBackground.dispose();
+        ExtraLife.disposeTexture();
         // Dispose of other resources
     }
+    
 }
 

@@ -12,6 +12,7 @@ public abstract class Entity {
 	private Color color;
 	private float speed;
 	private int health;
+	private Rectangle bounds;
 	
 	public Entity() {
 		
@@ -92,6 +93,14 @@ public abstract class Entity {
 	
 	//abstract void
 	public abstract void update();
+	
+	private void updateBounds() {
+        bounds.setPosition(x, y);
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
 	
 	public void dispose() {
 		this.dispose();

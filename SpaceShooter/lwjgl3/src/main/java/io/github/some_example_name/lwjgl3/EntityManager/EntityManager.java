@@ -22,6 +22,11 @@ private List<Entity> entityList;
 		entityList.add(entity);
 	}
 	
+	public List<Entity> getAllEntities() {
+	    return entityList; // Return the list of all entities
+	}
+
+	
 	//Remove entity from EntityManager
 	public void removeEntities(Entity entity) {
 		entityList.remove(entity);

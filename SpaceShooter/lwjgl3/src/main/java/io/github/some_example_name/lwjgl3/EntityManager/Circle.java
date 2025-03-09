@@ -39,6 +39,10 @@ public class Circle extends Entity{
 		this.radius = radius;
 	}
 	
+	public Rectangle getBounds() {
+	    return new Rectangle(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+	}
+
 	//Draw Circle Sprite and Rectangle
 	public void draw(ShapeRenderer shape) {
 		
