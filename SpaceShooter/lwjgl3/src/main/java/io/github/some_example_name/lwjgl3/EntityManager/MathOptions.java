@@ -28,6 +28,8 @@ public class MathOptions extends Circle {
     private boolean option1Correct;
     private boolean option2Correct;
     private int topic;
+    
+    private static boolean revealAnswer = false; // ✅ New flag
 
     public MathOptions() {
     }
@@ -46,6 +48,10 @@ public class MathOptions extends Circle {
         
     }
 
+    public static void setRevealAnswer(boolean reveal) {
+        revealAnswer = reveal;
+    }
+
     public Texture getTexture() {
         return tex;
     }
@@ -56,28 +62,72 @@ public class MathOptions extends Circle {
 
     public void draw(SpriteBatch batch) {
         batch.begin();
-        batch.draw(this.getTexture(), this.getX() - (this.getTexture().getWidth() / 2), this.getY() - (this.getTexture().getWidth() / 2), this.getTexture().getWidth(), this.getTexture().getHeight());
-        batch.draw(this.getTexture(), this.getX() * 3 - (this.getTexture().getWidth() / 2), this.getY() - (this.getTexture().getWidth() / 2), this.getTexture().getWidth(), this.getTexture().getHeight());
+        
+        // Draw the math options (textures)
+        batch.draw(this.getTexture(), this.getX() - (this.getTexture().getWidth() / 2), 
+                   this.getY() - (this.getTexture().getWidth() / 2), 
+                   this.getTexture().getWidth(), this.getTexture().getHeight());
 
-        option1Bounds = new Rectangle(this.getX() - (this.getTexture().getWidth() / 2), this.getY() - (this.getTexture().getWidth() / 2), this.getTexture().getWidth(), this.getTexture().getHeight());
-        option2Bounds = new Rectangle(this.getX() * 3 - (this.getTexture().getWidth() / 2), this.getY() - (this.getTexture().getWidth() / 2), this.getTexture().getWidth(), this.getTexture().getHeight());
+        batch.draw(this.getTexture(), this.getX() * 3 - (this.getTexture().getWidth() / 2), 
+                   this.getY() - (this.getTexture().getWidth() / 2), 
+                   this.getTexture().getWidth(), this.getTexture().getHeight());
 
+        // ✅ Update option bounds for collision detection
+        option1Bounds = new Rectangle(this.getX() - (this.getTexture().getWidth() / 2), 
+                                      this.getY() - (this.getTexture().getWidth() / 2), 
+                                      this.getTexture().getWidth(), 
+                                      this.getTexture().getHeight());
+
+        option2Bounds = new Rectangle(this.getX() * 3 - (this.getTexture().getWidth() / 2), 
+                                      this.getY() - (this.getTexture().getWidth() / 2), 
+                                      this.getTexture().getWidth(), 
+                                      this.getTexture().getHeight());
+
+        // ✅ Draw the math question in white
         GlyphLayout questionLayout = new GlyphLayout(Font, questionText);
         float questX = (Gdx.graphics.getWidth() - questionLayout.width) / 2;
         float questY = 600;
+        Font.setColor(Color.WHITE); // Set default color for question
         Font.draw(batch, questionText, questX, questY);
 
+        // ✅ Draw option 1 with conditional highlighting
         GlyphLayout option1Layout = new GlyphLayout(Font, option1Text);
         float option1X = this.getX() - option1Layout.width / 2;
         float option1Y = this.getY() + option1Layout.height / 2;
+
+        if (revealAnswer) { 
+            if (option1Correct) {
+                Font.setColor(Color.GREEN); // ✅ Highlight correct answer when power-up is active
+            } else {
+                Font.setColor(Color.YELLOW);
+            }
+        } else {
+            Font.setColor(Color.YELLOW); // ✅ Default color when power-up is not active
+        }
         Font.draw(batch, option1Text, option1X, option1Y);
 
+        // ✅ Draw option 2 with conditional highlighting
         GlyphLayout option2Layout = new GlyphLayout(Font, option2Text);
         float option2X = this.getX() * 3 - option2Layout.width / 2;
         float option2Y = this.getY() + option2Layout.height / 2;
+
+        if (revealAnswer) {
+            if (option2Correct) {
+                Font.setColor(Color.GREEN); // ✅ Highlight correct answer when power-up is active
+            } else {
+                Font.setColor(Color.YELLOW);
+            }
+        } else {
+            Font.setColor(Color.YELLOW); // ✅ Default color when power-up is not active
+        }
         Font.draw(batch, option2Text, option2X, option2Y);
+
+        // ✅ Reset font color to default after drawing
+        Font.setColor(Color.YELLOW);
+
         batch.end();
     }
+
 
     public void randomQuestionGenerator(int topic) {
         Object[] questionData = null;

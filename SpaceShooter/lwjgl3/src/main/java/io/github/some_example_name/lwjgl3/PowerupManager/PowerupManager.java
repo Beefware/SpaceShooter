@@ -69,44 +69,58 @@ public class PowerupManager {
     // ✅ 3️⃣ Spawn the ExtraLife power-up
     public void spawnPowerup(float x, float y) {
         int screenWidth = Gdx.graphics.getWidth();
-        int screenHeight = Gdx.graphics.getHeight();
-
         float safeX = random.nextFloat() * (screenWidth - 50) + 25; 
-        float safeY = Gdx.graphics.getHeight(); 
+        float safeY = Gdx.graphics.getHeight();
 
-        Powerup newPowerup = new ExtraLife(safeX, safeY, 10, 2);
+        Powerup newPowerup;
+
+        if (random.nextBoolean()) { // ✅ 50% chance to spawn either power-up
+            newPowerup = new ExtraLife(safeX, safeY, 10, 2);
+            System.out.println("✅ Spawned ExtraLife at (" + safeX + ", " + safeY + ")");
+        } else {
+            newPowerup = new HintPowerup(safeX, safeY, 10, 2);
+            System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
+        }
+
         powerups.add(newPowerup);
-
-        System.out.println("✅ Spawned ExtraLife at (" + safeX + ", " + safeY + ")");
     }
+
 
     public void checkCollision(Triangle player, TriangleProjectile projectile) {
         Iterator<Powerup> iterator = powerups.iterator();
 
         while (iterator.hasNext()) {
             Powerup p = iterator.next();
+            String powerupName = p.getClass().getSimpleName();
 
-            // ✅ If player collects the power-up
-            if (CollisionManager.checkPowerupCollision(player, new ArrayList<>(List.of(p)))) {
-                if (player.getHealth() < 5) { 
-                    player.setHealth(player.getHealth() + 1);  
-                    System.out.println("❤️ Extra Life Collected! Health: " + player.getHealth());
-                } else {
-                    System.out.println("⚠️ Power-up ignored: Player already at max health (5 hearts).");
-                }
-                iterator.remove(); // ✅ Remove power-up after collection
-                continue; // ✅ Avoid checking again after removal
+            boolean playerCollected = CollisionManager.checkPowerupCollision(player, new ArrayList<>(List.of(p)));
+            boolean projectileHit = CollisionManager.checkProjectilePowerupCollision(projectile, new ArrayList<>(List.of(p)));
+
+            if (playerCollected) {
+                System.out.println("⚡ Player collected power-up: " + powerupName);
+            }
+            if (projectileHit) {
+                System.out.println("💥 Power-up hit by projectile: " + powerupName);
             }
 
-            // ✅ If projectile hits the power-up (but does not remove projectile)
-            if (CollisionManager.checkProjectilePowerupCollision(projectile, new ArrayList<>(List.of(p))))  {
-                if (player.getHealth() < 5) { 
-                    player.setHealth(player.getHealth() + 1);
-                    System.out.println("❤️ Health increased: " + player.getHealth());
-                } else {
-                    System.out.println("⚠️ At max health (5)! No extra life given.");
+            if (playerCollected || projectileHit) {
+                System.out.println("✅ Applying effect for " + powerupName);
+                
+                if (p instanceof ExtraLife) { 
+                    // ✅ Only increase health for ExtraLife
+                    if (player.getHealth() < 5) {  
+                        player.setHealth(player.getHealth() + 1);
+                        System.out.println("❤️ Extra Life! Health: " + player.getHealth());
+                    } else {
+                        System.out.println("⚠️ Player already at max health.");
+                    }
+                } else if (p instanceof HintPowerup) { 
+                    // ✅ Ensure HintPowerup does NOT increase health
+                    ((HintPowerup) p).applyEffect();
+                    System.out.println("💡 Hint power-up activated!");
                 }
-                iterator.remove(); // ✅ Remove power-up after being hit
+
+                iterator.remove(); // ✅ Remove power-up after collection
             }
         }
     }
@@ -148,8 +162,8 @@ public class PowerupManager {
         if (!powerupActive) return;
 
         float screenWidth = Gdx.graphics.getWidth();
-        float barHeight = 10;
-        float barY = 10; // Bottom position
+        float barHeight = 15; // Slightly taller for visibility
+        float barY = 5; // ✅ Position close to the bottom of the screen
         float progress = powerupTimer / maxPowerupDuration; // Shrinking width
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -157,5 +171,6 @@ public class PowerupManager {
         shapeRenderer.rect(0, barY, screenWidth * progress, barHeight);
         shapeRenderer.end();
     }
+
 
 }
