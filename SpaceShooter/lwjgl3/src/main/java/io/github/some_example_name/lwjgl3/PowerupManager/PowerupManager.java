@@ -5,7 +5,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
@@ -16,16 +19,27 @@ public class PowerupManager {
     
     private List<Powerup> powerups;
     private Random random;
+    private static float powerupTimer = 0; // Time left for power-up
+    private static float maxPowerupDuration = 0; // Total duration of power-up
+    private static boolean powerupActive = false; // Is a power-up currently active?
+    private ShapeRenderer shapeRenderer;
     
     public List<Powerup> getPowerups() {
         return powerups;
     }
 
+    public void startPowerupTimer(float duration) {
+        powerupTimer = duration;
+        maxPowerupDuration = duration;
+        powerupActive = true;
+    }
+    
     public PowerupManager() {
         powerups = new ArrayList<>();
         random = new Random();
+        shapeRenderer = new ShapeRenderer();
         
-        // ✅ 1️⃣ Schedule an immediate spawn
+        // ✅ Schedule power-ups
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
@@ -35,6 +49,8 @@ public class PowerupManager {
 
         scheduleNextSpawn();
     }
+
+    
     
     // ✅ 2️⃣ Schedule next spawn
     private void scheduleNextSpawn() {
@@ -108,12 +124,38 @@ public class PowerupManager {
                 iterator.remove();
             }
         }
+
+        // ✅ Update the power-up timer
+        if (powerupActive) {
+            powerupTimer -= deltaTime;
+            if (powerupTimer <= 0) {
+                powerupActive = false;
+            }
+        }
     }
+
 
     // ✅ 6️⃣ Render power-ups
     public void render(SpriteBatch batch) {
         for (Powerup p : powerups) {
             p.draw(batch);
         }
+
+        drawPowerupTimer(); // ✅ Draw the shrinking bar
     }
+
+    private void drawPowerupTimer() {
+        if (!powerupActive) return;
+
+        float screenWidth = Gdx.graphics.getWidth();
+        float barHeight = 10;
+        float barY = 10; // Bottom position
+        float progress = powerupTimer / maxPowerupDuration; // Shrinking width
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.GREEN);
+        shapeRenderer.rect(0, barY, screenWidth * progress, barHeight);
+        shapeRenderer.end();
+    }
+
 }

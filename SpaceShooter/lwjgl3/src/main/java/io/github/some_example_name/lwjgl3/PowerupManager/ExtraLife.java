@@ -24,9 +24,12 @@ public class ExtraLife extends Powerup {
     @Override
     public void applyEffect() {
         System.out.println("❤️ Extra Life Gained!");
-        // ✅ Add logic to increase player's life
+        PowerupManager powerupManager = new PowerupManager();
+		// ✅ Add logic to increase player's life
+        // ✅ Start the timer for 5 seconds (adjust as needed)
+        powerupManager.startPowerupTimer(5.0f);
     }
-
+    
     @Override
     public void draw(SpriteBatch batch) {
         if (heartTexture != null) {
