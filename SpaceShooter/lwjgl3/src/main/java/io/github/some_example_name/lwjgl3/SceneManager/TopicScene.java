@@ -20,6 +20,11 @@ public class TopicScene extends Scene{
     // Topic screen variables
 	private SpriteBatch batch;
     private Texture gameBackground;
+    private Texture addition;
+    private Texture subtraction;
+    private Texture multiplication;
+    private Texture division;
+    private Texture random;
     private BitmapFont titleFont, buttonFont;
     private SceneManager sceneManager;
     private float buttonAnimationTime = 0;
@@ -42,15 +47,20 @@ public class TopicScene extends Scene{
         gameBackground = new Texture("space_black.jpg");
 
         // Button positions
-        additionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 350, 400, 30);
+        addition = new Texture("Addition.png");
+        additionButtonBounds = new Rectangle((Gdx.graphics.getWidth() - addition.getWidth()/5)/2, 350, addition.getWidth()/5, addition.getHeight()/5);
         
-        subtractionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 300, 400, 30);
+        subtraction = new Texture("Subtraction.png");
+        subtractionButtonBounds = new Rectangle((Gdx.graphics.getWidth() - subtraction.getWidth()/5)/2, 275, subtraction.getWidth()/5, subtraction.getHeight()/5);
         
-        multiplicationButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 250, 400, 30);
+        multiplication = new Texture("Multiplication.png");
+        multiplicationButtonBounds = new Rectangle((Gdx.graphics.getWidth() - multiplication.getWidth()/5)/2, 200, multiplication.getWidth()/5, multiplication.getHeight()/5);
         
-        divisionButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 30);
-        
-        randomButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 150, 400, 30);
+        division = new Texture("Division.png");
+        divisionButtonBounds = new Rectangle((Gdx.graphics.getWidth() - division.getWidth()/5)/2, 125, division.getWidth()/5, division.getHeight()/5);
+
+        random = new Texture("Random.png");
+        randomButtonBounds = new Rectangle((Gdx.graphics.getWidth() - random.getWidth()/5)/2, 50, random.getWidth()/5, random.getHeight()/5);
     
     }
     
@@ -60,25 +70,45 @@ public class TopicScene extends Scene{
         ScreenUtils.clear(0, 0, 0.2f, 1);
         batch.begin();
         batch.draw(gameBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        String title = "Space Shooter";
+       
+        String title = "Select Topic:";
         GlyphLayout titleLayout = new GlyphLayout(titleFont, title);
         float titleX = (Gdx.graphics.getWidth() - titleLayout.width) / 2;
         float titleY = Gdx.graphics.getHeight() * 0.75f;
         titleFont.draw(batch, title, titleX, titleY);
+        
+        //Draw addition button
+        batch.draw(addition,additionButtonBounds.getX(),additionButtonBounds.getY(),
+        			additionButtonBounds.getWidth(),additionButtonBounds.getHeight());
 
+		 // Draw subtraction button
+		 batch.draw(subtraction, subtractionButtonBounds.getX(), subtractionButtonBounds.getY(), 
+		            subtractionButtonBounds.getWidth(), subtractionButtonBounds.getHeight());
+		
+		 // Draw multiplication button
+		 batch.draw(multiplication, multiplicationButtonBounds.getX(), multiplicationButtonBounds.getY(), 
+		            multiplicationButtonBounds.getWidth(), multiplicationButtonBounds.getHeight());
+		
+		 // Draw division button
+		 batch.draw(division, divisionButtonBounds.getX(), divisionButtonBounds.getY(), 
+		            divisionButtonBounds.getWidth(), divisionButtonBounds.getHeight());
+		
+		 // Draw random button
+		 batch.draw(random, randomButtonBounds.getX(), randomButtonBounds.getY(), 
+		            randomButtonBounds.getWidth(), randomButtonBounds.getHeight());
+		 
         // Button animation
         float scale = 1 + MathUtils.sin(buttonAnimationTime * 2) * 0.1f;
         buttonFont.getData().setScale(scale);
         
         batch.end();
 
-        drawButton(additionButtonBounds, "Addition");
-        drawButton(subtractionButtonBounds, "Subtraction");
-        drawButton(multiplicationButtonBounds, "Multiplication");
-        drawButton(divisionButtonBounds, "Division");
-        drawButton(randomButtonBounds, "Random");
-        
+        //drawButton(additionButtonBounds, "Addition");
+//        drawButton(subtractionButtonBounds, "Subtraction");
+//        drawButton(multiplicationButtonBounds, "Multiplication");
+//        drawButton(divisionButtonBounds, "Division");
+//        drawButton(randomButtonBounds, "Random");
+//        
     }
     
     public void update() {

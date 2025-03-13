@@ -94,16 +94,16 @@ public class PowerupManager {
             String powerupName = p.getClass().getSimpleName();
 
             boolean playerCollected = CollisionManager.checkPowerupCollision(player, new ArrayList<>(List.of(p)));
-            boolean projectileHit = CollisionManager.checkProjectilePowerupCollision(projectile, new ArrayList<>(List.of(p)));
+           // boolean projectileHit = CollisionManager.checkProjectilePowerupCollision(projectile, new ArrayList<>(List.of(p)));
 
             if (playerCollected) {
                 System.out.println("⚡ Player collected power-up: " + powerupName);
             }
-            if (projectileHit) {
-                System.out.println("💥 Power-up hit by projectile: " + powerupName);
-            }
+//            if (projectileHit) {
+//                System.out.println("💥 Power-up hit by projectile: " + powerupName);
+//            }
 
-            if (playerCollected || projectileHit) {
+            if (playerCollected) {
                 System.out.println("✅ Applying effect for " + powerupName);
                 
                 if (p instanceof ExtraLife) { 

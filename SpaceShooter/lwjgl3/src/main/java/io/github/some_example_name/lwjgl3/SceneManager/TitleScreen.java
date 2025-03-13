@@ -20,6 +20,7 @@ public class TitleScreen extends Scene{
     // Title screen variables
 	private SpriteBatch batch;
     private Texture gameBackground;
+    private Texture gameTitle;
     private BitmapFont titleFont, buttonFont;
     private Rectangle startButtonBounds, optionsButtonBounds, exitButtonBounds;
     private float buttonAnimationTime = 0;
@@ -39,6 +40,7 @@ public class TitleScreen extends Scene{
         buttonFont.setColor(Color.WHITE);
 
         gameBackground = new Texture("space_black.jpg");
+        gameTitle = new Texture("MathShooterLogo.png");
 
         // Button positions
         startButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 80);
@@ -52,12 +54,10 @@ public class TitleScreen extends Scene{
         ScreenUtils.clear(0, 0, 0.2f, 1);
         batch.begin();
         batch.draw(gameBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
-        String title = "Space Shooter";
-        GlyphLayout titleLayout = new GlyphLayout(titleFont, title);
-        float titleX = (Gdx.graphics.getWidth() - titleLayout.width) / 2;
-        float titleY = Gdx.graphics.getHeight() * 0.75f;
-        titleFont.draw(batch, title, titleX, titleY);
+        
+        float titleX = (Gdx.graphics.getWidth() - gameTitle.getWidth()/10) / 2;
+        float titleY = Gdx.graphics.getHeight() * 0.4f;
+        batch.draw(gameTitle,titleX,titleY,gameTitle.getWidth()/10,gameTitle.getHeight()/10);
 
         // Button animation
         float scale = 1 + MathUtils.sin(buttonAnimationTime * 2) * 0.1f;

@@ -53,7 +53,7 @@ public class OptionsScene extends Scene{
         batch.begin();
         batch.draw(gameBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        String title = "Space Shooter";
+        String title = "Level Select:";
         GlyphLayout titleLayout = new GlyphLayout(titleFont, title);
         float titleX = (Gdx.graphics.getWidth() - titleLayout.width) / 2;
         float titleY = Gdx.graphics.getHeight() * 0.75f;

@@ -45,9 +45,11 @@ public class Triangle extends Entity{
 
 	//Minus i health if triangle takes damage (Triangle and CircleProjectile collision)
 	public void damage() {
-		this.setHealth(getHealth()-1);
-		this.setTexture(new Texture("PlayerHealing.png"));
-		isHit = true;
+		if (this.getTexture().toString() != "PlayerHealing.png") {
+			this.setHealth(getHealth()-1);
+			this.setTexture(new Texture("PlayerHealing.png"));
+			isHit = true;
+		}
 	}
 	
 	//Return isHit if Collision 

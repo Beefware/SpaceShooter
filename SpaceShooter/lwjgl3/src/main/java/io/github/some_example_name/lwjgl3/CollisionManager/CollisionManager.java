@@ -42,7 +42,7 @@ public class CollisionManager {
                     public void run() {
                         triangleProjectile.getTriangle().resetDamageFlag();
                     }
-                }, 1);
+                }, 2);
                 return CollisionResult.WRONG_OPTION;
             }
         }
@@ -69,7 +69,7 @@ public class CollisionManager {
                     public void run() {
                         triangleProjectile.getTriangle().resetDamageFlag();
                     }
-                }, 1);
+                }, 2);
                 return CollisionResult.WRONG_OPTION;
             }
         }
@@ -88,7 +88,7 @@ public class CollisionManager {
                     triangle.resetDamageFlag();
                     mOptions.respawn();
                 }
-            }, 3);
+            }, 0.5f);
             return true;
         }
         return false;
