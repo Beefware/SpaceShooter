@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class AudioManager {
+	private boolean isMuted = false;
 	 private IAudioPlayer backgroundMusic;  // For background music
 	 private Map<String, ISoundEffect> soundEffects;
 	 private float musicVolume;      // Volume control for background music
@@ -17,6 +18,34 @@ public class AudioManager {
 		 this.soundVolume = 1.0f; // Default sound volume
 		 this.soundEffects = new HashMap<>();	     
 	 }
+	 
+	 public float getMusicVolume() {
+		 return musicVolume;
+	 }
+	 
+	 // Set Audio Volume
+	 public void setMusicVolume(float volume) {
+	        this.musicVolume = volume;
+	        for (ISoundEffect effect : soundEffects.values()) {
+	            effect.setVolume(volume);
+	        }
+	 }
+	 
+	 public float getSoundVolume() {
+		 return soundVolume;
+	 }
+	 
+	 // Set Audio Volume
+	 public void setSoundVolume(float volume) {
+		 	if (!isMuted) {
+		 		this.soundVolume = volume;
+		        for (ISoundEffect effect : soundEffects.values()) {
+		            effect.setVolume(volume);
+		        }
+		 	}
+	        
+	 }
+	 
 	 
 	// Set Background Music
 	    public void setBackgroundMusic(IAudioPlayer musicPlayer) {
@@ -39,6 +68,29 @@ public class AudioManager {
 		if (backgroundMusic != null) {
 			backgroundMusic.stop();  // Stop music
 	    }
+	}
+	
+	public void muteAll() {
+		isMuted = !isMuted;
+		
+		if(isMuted) {
+			backgroundMusic.mute();
+			for (ISoundEffect effect : soundEffects.values()) {
+	            effect.mute();
+	        }
+		} else {
+			if (backgroundMusic != null) {
+                backgroundMusic.setVolume(musicVolume);
+            }
+            for (ISoundEffect effect : soundEffects.values()) {
+                effect.setVolume(soundVolume);
+            }
+		}
+		
+	}
+	
+	public boolean isMuted() {
+		return isMuted;
 	}
 	
 	// Add Sound Effect

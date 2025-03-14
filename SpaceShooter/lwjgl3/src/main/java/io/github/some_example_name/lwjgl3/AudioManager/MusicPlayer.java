@@ -28,6 +28,13 @@ public class MusicPlayer implements IAudioPlayer {
             music.stop();
         }
     }
+    
+    @Override
+    public void mute() {
+    	this.volume = 0.0f;
+        music.setVolume(this.volume);
+        music.setVolume(volume);
+    }
 
     @Override
     public void setVolume(float volume) {

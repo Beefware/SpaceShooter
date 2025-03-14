@@ -5,6 +5,7 @@ public interface IAudioPlayer {
 	void play(); // Play music
 	void stop(); // Stop music 
 	void setVolume(float volume); // Set music volume
+	void mute();
 	void fadeOut(float duration); // Fades music out
 	void fadeIn(float duraction); // Fades music in
 	void dispose(); // Dispose music resources

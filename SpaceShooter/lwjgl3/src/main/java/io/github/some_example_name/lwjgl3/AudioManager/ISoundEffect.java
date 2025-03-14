@@ -4,5 +4,7 @@ package io.github.some_example_name.lwjgl3.AudioManager;
 public interface ISoundEffect {
 	void play();
     void play(float volume);
+    void setVolume(float volume);
+    void mute();
     void dispose();
 }

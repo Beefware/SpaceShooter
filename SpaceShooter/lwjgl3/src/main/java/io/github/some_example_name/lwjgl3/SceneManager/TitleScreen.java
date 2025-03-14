@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.some_example_name.lwjgl3.GameMaster;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
@@ -66,7 +69,7 @@ public class TitleScreen extends Scene{
         batch.end();
 
         drawButton(startButtonBounds, "Start Game");
-        //drawButton(optionsButtonBounds, "Options");
+        drawButton(optionsButtonBounds, "Options");
         drawButton(exitButtonBounds, "Exit");
         
     }
@@ -83,7 +86,7 @@ public class TitleScreen extends Scene{
                 Scene topicScene = new TopicScene(sceneManager);
                 sceneManager.setCurrentScene(topicScene);
             } else if (optionsButtonBounds.contains(mouseX, mouseY)) {
-                Scene optionsScene = new OptionsScene(sceneManager);
+                Scene optionsScene = new OptionsScene(sceneManager, sceneManager.getAudioManager());
                 sceneManager.setCurrentScene(optionsScene);
             } else if (exitButtonBounds.contains(mouseX, mouseY)) {
                 Gdx.app.exit();

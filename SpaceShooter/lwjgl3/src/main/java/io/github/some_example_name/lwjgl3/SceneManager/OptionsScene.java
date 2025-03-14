@@ -7,6 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
+
+import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
+
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
@@ -21,12 +24,20 @@ public class OptionsScene extends Scene{
 	private SpriteBatch batch;
     private Texture gameBackground;
     private BitmapFont titleFont, buttonFont;
-    private Rectangle volumeButtonBounds, backButtonBounds;
+    private Rectangle volumeSliderBounds, soundSliderBounds, backButtonBounds, soundToggleBounds;
     private float buttonAnimationTime = 0;
     private SceneManager sceneManager;
+    private float musicVolume = 1.0f;
+    private float soundVolume = 1.0f;
+    private static final float MIN_VOLUME = 0.1f; 
+    private static final float MAX_VOLUME = 1.1f;
+
+    private boolean soundEnabled = true;
+    private AudioManager audioManager;
     
-    public OptionsScene(SceneManager sceneManager) {
+    public OptionsScene(SceneManager sceneManager, AudioManager audioManager) {
         this.sceneManager = sceneManager;  // Assign the SceneManager passed from GameMaster
+        this.audioManager = audioManager;
         
         batch = new SpriteBatch();
 
@@ -41,9 +52,11 @@ public class OptionsScene extends Scene{
         gameBackground = new Texture("space_black.jpg");
 
         // Button positions
-        volumeButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 80);
-        
-        backButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 100, 400, 80);
+        volumeSliderBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 300, 400, 80);
+        soundSliderBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 200, 400, 80); 
+        soundToggleBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 100, 400, 80); 
+        backButtonBounds = new Rectangle(Gdx.graphics.getWidth() / 2 - 200, 50, 400, 80);   
+       
     }
     
     @Override
@@ -53,7 +66,7 @@ public class OptionsScene extends Scene{
         batch.begin();
         batch.draw(gameBackground, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
-        String title = "Level Select:";
+        String title = "Settings";
         GlyphLayout titleLayout = new GlyphLayout(titleFont, title);
         float titleX = (Gdx.graphics.getWidth() - titleLayout.width) / 2;
         float titleY = Gdx.graphics.getHeight() * 0.75f;
@@ -64,8 +77,9 @@ public class OptionsScene extends Scene{
         buttonFont.getData().setScale(scale);
         
         batch.end();
-
-        drawButton(volumeButtonBounds, "Volume");
+        drawButton(volumeSliderBounds, "Music Volume: " + (int) (musicVolume * 100) + "%");
+        drawButton(soundSliderBounds, "Effects Volume: " + (int) (soundVolume * 100) + "%");
+        drawButton(soundToggleBounds, "Mute: " + (soundEnabled ? "On" : "Off"));
         drawButton(backButtonBounds, "Back");
         
     }
@@ -76,8 +90,21 @@ public class OptionsScene extends Scene{
         if (Gdx.input.justTouched()) {
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
-            if (volumeButtonBounds.contains(mouseX, mouseY)) {
-                
+            if (volumeSliderBounds.contains(mouseX, mouseY)) {
+                musicVolume += 0.1f;
+                if (musicVolume > MAX_VOLUME) {
+                    musicVolume = MIN_VOLUME;
+                }
+                audioManager.setMusicVolume(musicVolume);
+            } else if (soundSliderBounds.contains(mouseX, mouseY)) {
+                soundVolume += 0.1f;
+                if (soundVolume > MAX_VOLUME) {
+                    soundVolume = MIN_VOLUME;
+                }
+                audioManager.setSoundVolume(soundVolume);
+            } else if (soundToggleBounds.contains(mouseX, mouseY)) {
+                soundEnabled = !soundEnabled;
+                audioManager.muteAll();
             } else if (backButtonBounds.contains(mouseX, mouseY)) {
             	Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);

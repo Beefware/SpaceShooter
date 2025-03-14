@@ -53,5 +53,6 @@ public class SceneManager {
     public GameMaster getGameMaster() {
         return gameMaster;
     }
+
 }
 
