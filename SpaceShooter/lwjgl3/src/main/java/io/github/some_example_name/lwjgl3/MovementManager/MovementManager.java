@@ -50,19 +50,24 @@ public class MovementManager {
 //                circle.setY(circle.getY() - 10);
 //            }
 //
-//         // Check boundaries and toggle direction
-//            if (circle.getX() > Gdx.graphics.getWidth()) {
-//                circle.setMoveRight(false); // Change direction to left
-//            } else if (circle.getX() < 0) {
-//                circle.setMoveRight(true); // Change direction to right
-//            }
-//
-//            // Move horizontally based on the direction
-//            if (circle.isMoveRight()) {
-//                circle.setX(circle.getX() + 3); // Move right
-//            } else {
-//                circle.setX(circle.getX() - 3); // Move left
-//            }
+         // Check boundaries and toggle direction
+            if (mOptions.getOption2X()+mOptions.getTexture().getWidth() > Gdx.graphics.getWidth()) {
+            	mOptions.setMoveRight(false); // Change direction to left
+            } else if (mOptions.getOption1X() < 0) {
+            	mOptions.setMoveRight(true); // Change direction to right
+            }
+
+            if(mOptions.getMovement()) {
+            // Move horizontally based on the direction
+	            if (mOptions.getMoveRight()) {
+	            	mOptions.setOption1x(mOptions.getOption1X()+3); // Move right
+	            	mOptions.setOption2x(mOptions.getOption2X()+3); // Move right
+	
+	            } else {
+	            	mOptions.setOption1x(mOptions.getOption1X()-3); // Move left
+	            	mOptions.setOption2x(mOptions.getOption2X()-3); // Move left
+	            	}
+            }
         }
     }
 
