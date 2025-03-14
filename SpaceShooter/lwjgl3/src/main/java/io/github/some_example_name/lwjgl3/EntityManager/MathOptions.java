@@ -16,7 +16,8 @@ public class MathOptions extends Circle {
     private Rectangle option2Bounds;
 
     private boolean circleHit = false;
-    private boolean moveRight = true;
+    private boolean movement = false;
+    private boolean moveRight = false;
     private boolean justHitByProjectile = false;
 
     private static int score;
@@ -24,9 +25,13 @@ public class MathOptions extends Circle {
     private BitmapFont Font;
     private String questionText;
     private String option1Text;
-    private String option2Text;
+    private float option1X;
     private boolean option1Correct;
+
+    private String option2Text;
+    private float option2X;
     private boolean option2Correct;
+    
     private int topic;
     
     private static boolean revealAnswer = false; // ✅ New flag
@@ -34,11 +39,13 @@ public class MathOptions extends Circle {
     public MathOptions() {
     }
 
-    public MathOptions(String string, float x, float y, float speed, int health, int topic) {
-        super(null, x / 4, y, 0, speed, health);
+    public MathOptions(String string, float speed, int health, int topic) {
+        super(null, Gdx.graphics.getWidth()/4, 700, 0, speed, health);
 
         this.tex = new Texture(string);
         this.topic = topic;
+        option1X = this.getX() - tex.getWidth()/2;
+        option2X = this.getX()*3 - tex.getWidth()/2;
 
         Font = new BitmapFont();
         Font.getData().setScale(3);
@@ -59,26 +66,43 @@ public class MathOptions extends Circle {
     public void setTexture(Texture tex) {
         this.tex = tex;
     }
+    
+    public float getOption1X() {
+    	return option1X;
+    }
+    
+    public void setOption1x(float x) {
+    	this.option1X = x;
+    }
+    
+    public float getOption2X() {
+    	return option2X;
+    }
+    
+    public void setOption2x(float x) {
+    	this.option2X = x;
+    }
+
 
     public void draw(SpriteBatch batch) {
         batch.begin();
         
         // Draw the math options (textures)
-        batch.draw(this.getTexture(), this.getX() - (this.getTexture().getWidth() / 2), 
+        batch.draw(this.getTexture(), option1X, 
                    this.getY() - (this.getTexture().getWidth() / 2), 
                    this.getTexture().getWidth(), this.getTexture().getHeight());
 
-        batch.draw(this.getTexture(), this.getX() * 3 - (this.getTexture().getWidth() / 2), 
+        batch.draw(this.getTexture(), option2X, 
                    this.getY() - (this.getTexture().getWidth() / 2), 
                    this.getTexture().getWidth(), this.getTexture().getHeight());
 
         // ✅ Update option bounds for collision detection
-        option1Bounds = new Rectangle(this.getX() - (this.getTexture().getWidth() / 2), 
+        option1Bounds = new Rectangle(option1X, 
                                       this.getY() - (this.getTexture().getWidth() / 2), 
                                       this.getTexture().getWidth(), 
                                       this.getTexture().getHeight());
 
-        option2Bounds = new Rectangle(this.getX() * 3 - (this.getTexture().getWidth() / 2), 
+        option2Bounds = new Rectangle(option2X, 
                                       this.getY() - (this.getTexture().getWidth() / 2), 
                                       this.getTexture().getWidth(), 
                                       this.getTexture().getHeight());
@@ -86,14 +110,14 @@ public class MathOptions extends Circle {
         // ✅ Draw the math question in white
         GlyphLayout questionLayout = new GlyphLayout(Font, questionText);
         float questX = (Gdx.graphics.getWidth() - questionLayout.width) / 2;
-        float questY = 600;
+        float questY = 550;
         Font.setColor(Color.WHITE); // Set default color for question
         Font.draw(batch, questionText, questX, questY);
 
         // ✅ Draw option 1 with conditional highlighting
         GlyphLayout option1Layout = new GlyphLayout(Font, option1Text);
-        float option1X = this.getX() - option1Layout.width / 2;
-        float option1Y = this.getY() + option1Layout.height / 2;
+        float x1 = option1X+tex.getWidth()/2 - option1Layout.width/2;
+        float y1 = this.getY() + option1Layout.height / 2;
 
         if (revealAnswer) { 
             if (option1Correct) {
@@ -104,12 +128,12 @@ public class MathOptions extends Circle {
         } else {
             Font.setColor(Color.YELLOW); // ✅ Default color when power-up is not active
         }
-        Font.draw(batch, option1Text, option1X, option1Y);
+        Font.draw(batch, option1Text, x1, y1);
 
         // ✅ Draw option 2 with conditional highlighting
         GlyphLayout option2Layout = new GlyphLayout(Font, option2Text);
-        float option2X = this.getX() * 3 - option2Layout.width / 2;
-        float option2Y = this.getY() + option2Layout.height / 2;
+        float x2 = option2X+tex.getWidth()/2 - option2Layout.width/2;
+        float y2 = this.getY() + option2Layout.height / 2;
 
         if (revealAnswer) {
             if (option2Correct) {
@@ -120,7 +144,7 @@ public class MathOptions extends Circle {
         } else {
             Font.setColor(Color.YELLOW); // ✅ Default color when power-up is not active
         }
-        Font.draw(batch, option2Text, option2X, option2Y);
+        Font.draw(batch, option2Text,x2,y2);
 
         // ✅ Reset font color to default after drawing
         Font.setColor(Color.YELLOW);
@@ -219,17 +243,24 @@ public class MathOptions extends Circle {
     }
 
     private String generateWrongAnswer(int correctAnswer) {
-        int wrongAnswer = MathUtils.random(100);
-        while (wrongAnswer == correctAnswer) {
-            wrongAnswer = MathUtils.random(100);
-        }
+        int wrongAnswer = correctAnswer+MathUtils.random(1,7);
+       
         return String.valueOf(wrongAnswer);
     }
 
     public void movement() {
     }
+    
+    public boolean getMovement() {
+    	return movement;
+    }
+    
+    public void setMovement(boolean movement){
+    	this.movement = movement;
+    }
+    
 
-    public boolean isMoveRight() {
+    public boolean getMoveRight() {
         return moveRight;
     }
 
@@ -309,7 +340,9 @@ public class MathOptions extends Circle {
 		
 		//Print out the score and and new random respawn point if circle hit
 		public void update() {		
-			
+			if(score>9) {
+				this.setMovement(true);
+			}
 			
 			
 			if(this.getColor()==Color.SALMON) {

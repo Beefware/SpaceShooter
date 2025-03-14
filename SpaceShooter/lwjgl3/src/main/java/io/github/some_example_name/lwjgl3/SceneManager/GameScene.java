@@ -56,7 +56,7 @@ public class GameScene extends Scene {
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
-        mOptions = new MathOptions("Meteor.png", Gdx.graphics.getWidth(), 650, 1, 1, topic);
+        mOptions = new MathOptions("Meteor.png", 1, 1, topic);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
         
         // Add entities to the EntityManager
