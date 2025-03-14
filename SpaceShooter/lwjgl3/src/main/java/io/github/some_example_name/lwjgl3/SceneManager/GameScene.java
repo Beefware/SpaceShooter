@@ -52,7 +52,7 @@ public class GameScene extends Scene {
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         entityManager = new EntityManager();
-        powerupManager = new PowerupManager();
+        powerupManager = PowerupManager.getInstance();
         
         // Initialize player, enemy, and bullets
         triangle = new Triangle("Player.png", 200, 5, 0, 3);

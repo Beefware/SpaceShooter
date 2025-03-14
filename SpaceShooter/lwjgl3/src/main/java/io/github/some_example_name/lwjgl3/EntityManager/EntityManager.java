@@ -2,12 +2,10 @@ package io.github.some_example_name.lwjgl3.EntityManager;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-
 import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
-
+import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
 
 public class EntityManager {
 private List<Entity> entityList;
@@ -42,19 +40,28 @@ private List<Entity> entityList;
 	
 	//Run Entity movements 
 	public void movement(MovementManager movementManager) {
-		for (Entity entity : entityList) {
-	        movementManager.moveEntity(entity); // Delegate movement to MovementManager
+	    for (Entity entity : entityList) {
+	        // Skip moving Circles if TimeFreeze is active
+	        if (entity instanceof Circle && TimeFreeze.isTimeFrozen()) {
+	            continue;
+	        }
 
-		}
+	        movementManager.moveEntity(entity);
+	    }
 	}
 	
 	//Update Entities
 	public void update() {
-		for (Entity entity : entityList) {
-			entity.update(); 
-		}
-		
+	    for (Entity entity : entityList) {
+	        // ❄️ Skip updating Circles if TimeFreeze is active
+	        if (entity instanceof Circle && TimeFreeze.isTimeFrozen()) {
+	            continue;
+	        }
+
+	        entity.update(); 
+	    }
 	}
+
 	
 	public void dispose() {
 		this.dispose();

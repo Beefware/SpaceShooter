@@ -1,8 +1,6 @@
 package io.github.some_example_name.lwjgl3.PowerupManager;
 
 import io.github.some_example_name.lwjgl3.EntityManager.Circle;
-import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
-
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 

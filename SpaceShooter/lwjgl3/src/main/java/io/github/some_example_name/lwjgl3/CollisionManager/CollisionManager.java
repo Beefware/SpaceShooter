@@ -1,6 +1,7 @@
 package io.github.some_example_name.lwjgl3.CollisionManager;
 
 import com.badlogic.gdx.utils.Timer;
+import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
 import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
@@ -32,6 +33,7 @@ public class CollisionManager {
                         mOptions.respawn();
                     }
                 }, 2);
+                TimeFreeze.endTimeFreeze();
                 return CollisionResult.CORRECT_OPTION;
 
             } else if (!mOptions.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
@@ -43,6 +45,7 @@ public class CollisionManager {
                         triangleProjectile.getTriangle().resetDamageFlag();
                     }
                 }, 2);
+                TimeFreeze.endTimeFreeze();
                 return CollisionResult.WRONG_OPTION;
             }
         }
@@ -59,6 +62,7 @@ public class CollisionManager {
                         mOptions.respawn();
                     }
                 }, 2);
+                TimeFreeze.endTimeFreeze();
                 return CollisionResult.CORRECT_OPTION;
 
             } else if (!mOptions.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
@@ -70,6 +74,7 @@ public class CollisionManager {
                         triangleProjectile.getTriangle().resetDamageFlag();
                     }
                 }, 2);
+                TimeFreeze.endTimeFreeze();
                 return CollisionResult.WRONG_OPTION;
             }
         }

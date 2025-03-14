@@ -16,6 +16,8 @@ import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import com.badlogic.gdx.Gdx;
 
 public class PowerupManager {
+	
+	private static PowerupManager instance; // Singleton instance
     
     private List<Powerup> powerups;
     private Random random;
@@ -27,32 +29,29 @@ public class PowerupManager {
     public List<Powerup> getPowerups() {
         return powerups;
     }
+    
+    public static PowerupManager getInstance() {
+        if (instance == null) {
+            instance = new PowerupManager();
+        }
+        return instance;
+    }
+    
+    private PowerupManager() {
+        powerups = new ArrayList<>();
+        random = new Random();
+        shapeRenderer = new ShapeRenderer();
 
+        scheduleNextSpawn();
+    }
+    
     public void startPowerupTimer(float duration) {
         powerupTimer = duration;
         maxPowerupDuration = duration;
         powerupActive = true;
     }
-    
-    public PowerupManager() {
-        powerups = new ArrayList<>();
-        random = new Random();
-        shapeRenderer = new ShapeRenderer();
-        
-        // ✅ Schedule power-ups
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                spawnPowerup(random.nextInt(800), 600); 
-            }
-        }, 0);
 
-        scheduleNextSpawn();
-    }
-
-    
-    
-    // ✅ 2️⃣ Schedule next spawn
+    // Schedule next spawn
     private void scheduleNextSpawn() {
         float delay = random.nextFloat() * (40 - 10) + 10;
         Timer.schedule(new Timer.Task() {
@@ -66,25 +65,31 @@ public class PowerupManager {
         }, delay);
     }
 
-    // ✅ 3️⃣ Spawn the ExtraLife power-up
+    // Spawn the ExtraLife power-up
     public void spawnPowerup(float x, float y) {
         int screenWidth = Gdx.graphics.getWidth();
-        float safeX = random.nextFloat() * (screenWidth - 50) + 25; 
-        float safeY = Gdx.graphics.getHeight();
+
+        float safeX = Math.max(50, Math.min(x, screenWidth - 50));
+        float safeY = Math.min(Gdx.graphics.getHeight() - 50, 500); // ✅ Safer spawn Y
 
         Powerup newPowerup;
 
-        if (random.nextBoolean()) { // ✅ 50% chance to spawn either power-up
+        // power-ups: 0 = ExtraLife, 1 = HintPowerup, 2 = TimeFreeze
+        int randomChoice = random.nextInt(3); // ➡️ Random integer: 0, 1, or 2
+
+        if (randomChoice == 0) {
             newPowerup = new ExtraLife(safeX, safeY, 10, 2);
             System.out.println("✅ Spawned ExtraLife at (" + safeX + ", " + safeY + ")");
-        } else {
+        } else if (randomChoice == 1) {
             newPowerup = new HintPowerup(safeX, safeY, 10, 2);
             System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
+        } else {
+            newPowerup = new TimeFreeze(safeX, safeY, 10, 2);
+            System.out.println("❄️ Spawned TimeFreeze at (" + safeX + ", " + safeY + ")");
         }
 
         powerups.add(newPowerup);
     }
-
 
     public void checkCollision(Triangle player, TriangleProjectile projectile) {
         Iterator<Powerup> iterator = powerups.iterator();
@@ -107,7 +112,7 @@ public class PowerupManager {
                 System.out.println("✅ Applying effect for " + powerupName);
                 
                 if (p instanceof ExtraLife) { 
-                    // ✅ Only increase health for ExtraLife
+                    // Only increase health for ExtraLife
                     if (player.getHealth() < 5) {  
                         player.setHealth(player.getHealth() + 1);
                         System.out.println("❤️ Extra Life! Health: " + player.getHealth());
@@ -115,18 +120,18 @@ public class PowerupManager {
                         System.out.println("⚠️ Player already at max health.");
                     }
                 } else if (p instanceof HintPowerup) { 
-                    // ✅ Ensure HintPowerup does NOT increase health
+                    // Ensure HintPowerup does not increase health
                     ((HintPowerup) p).applyEffect();
                     System.out.println("💡 Hint power-up activated!");
                 }
 
-                iterator.remove(); // ✅ Remove power-up after collection
+                iterator.remove(); // Remove power-up after collection
             }
         }
     }
 
 
-    // ✅ 5️⃣ Update movement & remove off-screen power-ups
+    // Update movement & remove off-screen power-ups
     public void update(float deltaTime) {
         Iterator<Powerup> iterator = powerups.iterator();
 
@@ -139,7 +144,7 @@ public class PowerupManager {
             }
         }
 
-        // ✅ Update the power-up timer
+        // Update the power-up timer
         if (powerupActive) {
             powerupTimer -= deltaTime;
             if (powerupTimer <= 0) {
@@ -149,13 +154,13 @@ public class PowerupManager {
     }
 
 
-    // ✅ 6️⃣ Render power-ups
+    // Render power-ups
     public void render(SpriteBatch batch) {
         for (Powerup p : powerups) {
             p.draw(batch);
         }
 
-        drawPowerupTimer(); // ✅ Draw the shrinking bar
+        drawPowerupTimer(); // Draw the shrinking bar
     }
 
     private void drawPowerupTimer() {

@@ -1,26 +1,20 @@
 package io.github.some_example_name.lwjgl3;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.ScreenUtils;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.AudioManager.MusicPlayer;
 import io.github.some_example_name.lwjgl3.AudioManager.SoundEffect;
-import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Circle;
 import io.github.some_example_name.lwjgl3.EntityManager.EntityManager;
 import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
-import io.github.some_example_name.lwjgl3.MovementManager.MovementManager;
 import io.github.some_example_name.lwjgl3.SceneManager.SceneManager;
 import io.github.some_example_name.lwjgl3.SceneManager.TitleScreen;
-
+import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
 
 public class GameMaster extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -31,7 +25,7 @@ public class GameMaster extends ApplicationAdapter {
     private EntityManager entityManager;
     private AudioManager audioManager;
     private SceneManager sceneManager;  // SceneManager to handle different scenes
-
+    
     private float countdownTime = 3;
 
     @Override
@@ -67,9 +61,11 @@ public class GameMaster extends ApplicationAdapter {
         MathOptions.resetScore();
         // Reinitialize game entities
         
+        // Reset the frozen time state when restarting
+        TimeFreeze.setTimeFrozen(false);
+        
         triangle = new Triangle("Player.png", 200, 5, 0, 3);
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
-
 
         entityManager = new EntityManager();
         entityManager.addEntities(triangle);

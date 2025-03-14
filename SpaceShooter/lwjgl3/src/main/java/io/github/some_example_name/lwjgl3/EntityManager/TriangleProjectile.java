@@ -71,27 +71,56 @@ public class TriangleProjectile extends Entity {
     }
     
     public void checkCollision(List<Powerup> powerups, List<Entity> entities) {
+    	if (shouldRemove) return; // Don't process again!
+
+        // Handle powerups
         Iterator<Powerup> powerupIterator = powerups.iterator();
         while (powerupIterator.hasNext()) {
             Powerup powerup = powerupIterator.next();
             if (this.getBounds().overlaps(powerup.getBounds())) {
-                System.out.println("Projectile hit ExtraLife!");
-                
                 powerup.applyEffect();
                 powerupIterator.remove();
-                shouldRemove = true; // 
-                return;
+                shouldRemove = true;
+                return; // ✅ Exit after handling
             }
         }
 
+        // Handle entities
         Iterator<Entity> entityIterator = entities.iterator();
         while (entityIterator.hasNext()) {
             Entity entity = entityIterator.next();
-            if (entity instanceof Circle && this.getBounds().overlaps(entity.getBounds())) {
-                System.out.println("Projectile hit math number!");
-                entityIterator.remove();
-                shouldRemove = true; // 
-                return;
+
+            if (entity instanceof MathOptions) {
+                MathOptions mOptions = (MathOptions) entity;
+
+                if (this.getBounds().overlaps(mOptions.getBounds1())) {
+                    if (mOptions.isOption1()) {
+                        mOptions.damage();
+                    } else {
+                        triangle.damage();
+                    }
+
+                    shouldRemove = true;
+                    return; // ✅ Exit after handling
+                } 
+                else if (this.getBounds().overlaps(mOptions.getBounds2())) { // ✅ else if prevents double check
+                    if (mOptions.isOption2()) {
+                        mOptions.damage();
+                    } else {
+                        triangle.damage();
+                    }
+
+                    shouldRemove = true;
+                    return; // ✅ Exit after handling
+                }
+            }
+
+            if (entity instanceof Circle && !(entity instanceof MathOptions)) {
+                if (this.getBounds().overlaps(entity.getBounds())) {
+                    entityIterator.remove();
+                    shouldRemove = true;
+                    return;
+                }
             }
         }
     }

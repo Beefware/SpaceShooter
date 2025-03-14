@@ -9,16 +9,16 @@ import com.badlogic.gdx.utils.Timer;
 
 public class HintPowerup extends Powerup {
 
-    private static Texture hintTexture; // ✅ Load once
+    private static Texture hintTexture; // Load once
     private static final float FIXED_WIDTH = 60;
     private static final float FIXED_HEIGHT = 60;
-    private static final float POWERUP_DURATION = 5.0f; // ✅ Lasts for 5 seconds
+    private static final float POWERUP_DURATION = 5.0f; // Lasts for 5 seconds
 
     public HintPowerup(float x, float y, float radius, float speed) {
         super(x, y, radius, speed);
 
         if (hintTexture == null) {
-            hintTexture = new Texture(Gdx.files.internal("hint.png")); // ✅ Ensure "hint.png" exists
+            hintTexture = new Texture(Gdx.files.internal("hint.png")); // Ensure "hint.png" exists
             System.out.println("💡 Hint Power-up texture loaded.");
         }
     }
@@ -27,17 +27,17 @@ public class HintPowerup extends Powerup {
     public void applyEffect() {
         System.out.println("💡 Hint Power-up Activated! Correct answer highlighted.");
 
-        MathOptions.setRevealAnswer(true); // ✅ Enable highlighting of the correct answer
+        MathOptions.setRevealAnswer(true); // Enable highlighting of the correct answer
 
-        // ✅ Start the power-up effect timer in PowerupManager
-        PowerupManager powerupManager = new PowerupManager();
+        // Start the power-up effect timer in PowerupManager
+        PowerupManager powerupManager = PowerupManager.getInstance();
         powerupManager.startPowerupTimer(POWERUP_DURATION);
 
-        // ✅ Restore normal answer colors after 5 seconds
+        // Restore normal answer colors after 5 seconds
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
-                MathOptions.setRevealAnswer(false); // ✅ Disable highlighting
+                MathOptions.setRevealAnswer(false); // Disable highlighting
                 System.out.println("💡 Hint Power-up Expired! Answer no longer highlighted.");
             }
         }, POWERUP_DURATION);
@@ -47,7 +47,7 @@ public class HintPowerup extends Powerup {
     @Override
     public void draw(SpriteBatch batch) {
         if (hintTexture != null) {
-            if (!batch.isDrawing()) batch.begin(); // ✅ Ensure batch has started
+            if (!batch.isDrawing()) batch.begin(); // Ensure batch has started
             batch.draw(hintTexture, getX() - FIXED_WIDTH / 2, getY() - FIXED_HEIGHT / 2, FIXED_WIDTH, FIXED_HEIGHT);
             batch.end(); // ✅ End batch after drawing
         }

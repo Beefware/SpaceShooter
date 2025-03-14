@@ -7,24 +7,24 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class ExtraLife extends Powerup {
 
-    private static Texture heartTexture; // ✅ Static so it's loaded once
+    private static Texture heartTexture; // Loaded once
     private static final float FIXED_WIDTH = 60;  
     private static final float FIXED_HEIGHT = 60; 
 
     public ExtraLife(float x, float y, float radius, float speed) {
         super(x, y, radius, speed);
         
-        // ✅ Load the texture once for all power-ups
+        // Load the texture once for all power-ups
         if (heartTexture == null) {
             heartTexture = new Texture(Gdx.files.internal("heart.png"));
             System.out.println("✅ Heart texture loaded.");
         }
     }
-
+    
     @Override
     public void applyEffect() {
         System.out.println("❤️ Extra Life Gained!");
-		// ✅ Add logic to increase player's life
+		// Add logic to increase player's life
     }
     
     @Override
@@ -36,7 +36,7 @@ public class ExtraLife extends Powerup {
         }
     }
 
-    // ✅ Improved hitbox detection using Rectangle
+    // Improved hitbox detection using Rectangle
     public Rectangle getBounds() {
         return new Rectangle(getX() - FIXED_WIDTH / 2, getY() - FIXED_HEIGHT / 2, FIXED_WIDTH, FIXED_HEIGHT);
     }
