@@ -116,7 +116,7 @@ public class MathOptions extends Circle {
 
         // ✅ Draw option 1 with conditional highlighting
         GlyphLayout option1Layout = new GlyphLayout(Font, option1Text);
-        float x1 = this.getX() - option1Layout.width/2;
+        float x1 = option1X+tex.getWidth()/2 - option1Layout.width/2;
         float y1 = this.getY() + option1Layout.height / 2;
 
         if (revealAnswer) { 
@@ -132,7 +132,7 @@ public class MathOptions extends Circle {
 
         // ✅ Draw option 2 with conditional highlighting
         GlyphLayout option2Layout = new GlyphLayout(Font, option2Text);
-        float x2 = this.getX()*3 - option2Layout.width/2;
+        float x2 = option2X+tex.getWidth()/2 - option2Layout.width/2;
         float y2 = this.getY() + option2Layout.height / 2;
 
         if (revealAnswer) {
