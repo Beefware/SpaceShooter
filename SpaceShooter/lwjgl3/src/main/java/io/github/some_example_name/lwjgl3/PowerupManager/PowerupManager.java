@@ -16,27 +16,27 @@ import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
 import com.badlogic.gdx.Gdx;
 
 public class PowerupManager {
-	
-	private static PowerupManager instance; // Singleton instance
     
+    private static PowerupManager instance; // Singleton instance
+
     private List<Powerup> powerups;
     private Random random;
     private static float powerupTimer = 0; // Time left for power-up
     private static float maxPowerupDuration = 0; // Total duration of power-up
     private static boolean powerupActive = false; // Is a power-up currently active?
     private ShapeRenderer shapeRenderer;
-    
+
     public List<Powerup> getPowerups() {
         return powerups;
     }
-    
+
     public static PowerupManager getInstance() {
         if (instance == null) {
             instance = new PowerupManager();
         }
         return instance;
     }
-    
+
     private PowerupManager() {
         powerups = new ArrayList<>();
         random = new Random();
@@ -44,7 +44,7 @@ public class PowerupManager {
 
         scheduleNextSpawn();
     }
-    
+
     public void startPowerupTimer(float duration) {
         powerupTimer = duration;
         maxPowerupDuration = duration;
@@ -65,7 +65,7 @@ public class PowerupManager {
         }, delay);
     }
 
-    // Spawn the ExtraLife power-up
+    // Spawn a power-up (ExtraLife, HintPowerup, TimeFreeze, or PlayerSpeed)
     public void spawnPowerup(float x, float y) {
         int screenWidth = Gdx.graphics.getWidth();
 
@@ -74,18 +74,21 @@ public class PowerupManager {
 
         Powerup newPowerup;
 
-        // power-ups: 0 = ExtraLife, 1 = HintPowerup, 2 = TimeFreeze
-        int randomChoice = random.nextInt(3); // ➡️ Random integer: 0, 1, or 2
+        // power-ups: 0 = ExtraLife, 1 = HintPowerup, 2 = TimeFreeze, 3 = PlayerSpeed
+        int randomChoice = random.nextInt(4); // ➡️ Random integer: 0, 1, 2, or 3
 
         if (randomChoice == 0) {
             newPowerup = new ExtraLife(safeX, safeY, 10, 2);
             System.out.println("✅ Spawned ExtraLife at (" + safeX + ", " + safeY + ")");
-        } else if (randomChoice == 1) {
-            newPowerup = new HintPowerup(safeX, safeY, 10, 2);
-            System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
+//        } else if (randomChoice == 1) {
+//            newPowerup = new HintPowerup(safeX, safeY, 10, 2);
+//            System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
+//        } else if (randomChoice == 2) {
+//            newPowerup = new TimeFreeze(safeX, safeY, 10, 2);
+//            System.out.println("❄️ Spawned TimeFreeze at (" + safeX + ", " + safeY + ")");
         } else {
-            newPowerup = new TimeFreeze(safeX, safeY, 10, 2);
-            System.out.println("❄️ Spawned TimeFreeze at (" + safeX + ", " + safeY + ")");
+            newPowerup = new PlayerSpeed(safeX, safeY, 10, 2);
+            System.out.println("⚡ Spawned PlayerSpeed at (" + safeX + ", " + safeY + ")");
         }
 
         powerups.add(newPowerup);
@@ -99,18 +102,14 @@ public class PowerupManager {
             String powerupName = p.getClass().getSimpleName();
 
             boolean playerCollected = CollisionManager.checkPowerupCollision(player, new ArrayList<>(List.of(p)));
-           // boolean projectileHit = CollisionManager.checkProjectilePowerupCollision(projectile, new ArrayList<>(List.of(p)));
 
             if (playerCollected) {
                 System.out.println("⚡ Player collected power-up: " + powerupName);
             }
-//            if (projectileHit) {
-//                System.out.println("💥 Power-up hit by projectile: " + powerupName);
-//            }
 
             if (playerCollected) {
                 System.out.println("✅ Applying effect for " + powerupName);
-                
+
                 if (p instanceof ExtraLife) { 
                     // Only increase health for ExtraLife
                     if (player.getHealth() < 5) {  
@@ -119,17 +118,37 @@ public class PowerupManager {
                     } else {
                         System.out.println("⚠️ Player already at max health.");
                     }
+                } else if (p instanceof PlayerSpeed) { 
+                    System.out.println("⚡ PlayerSpeed power-up collected!");
+
+                    float oldSpeed = player.getSpeed();
+                    float newSpeed = oldSpeed * 2.0f;
+
+                    player.setSpeed(newSpeed);
+
+                    // Start power-up effect timer
+                    PowerupManager.getInstance().startPowerupTimer(5.0f); 
+
+                    // Restore speed after duration
+                    Timer.schedule(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            System.out.println("⚡ Player speed power-up expired!");
+                            player.setSpeed(oldSpeed);
+                        }
+                    }, 5.0f);
                 } else if (p instanceof HintPowerup) { 
-                    // Ensure HintPowerup does not increase health
                     ((HintPowerup) p).applyEffect();
                     System.out.println("💡 Hint power-up activated!");
+                } else if (p instanceof TimeFreeze) { 
+                    ((TimeFreeze) p).applyEffect();
+                    System.out.println("❄️ TimeFreeze power-up activated!");
                 }
 
                 iterator.remove(); // Remove power-up after collection
             }
         }
     }
-
 
     // Update movement & remove off-screen power-ups
     public void update(float deltaTime) {
@@ -153,7 +172,6 @@ public class PowerupManager {
         }
     }
 
-
     // Render power-ups
     public void render(SpriteBatch batch) {
         for (Powerup p : powerups) {
@@ -176,6 +194,4 @@ public class PowerupManager {
         shapeRenderer.rect(0, barY, screenWidth * progress, barHeight);
         shapeRenderer.end();
     }
-
-
 }

@@ -23,23 +23,20 @@ public class MovementManager {
     }
 
     private void moveTriangle(Triangle triangle) {
-        // Triangle movement logic
+
         if (!triangle.isGameOver()) {
+            float moveSpeed = triangle.getSpeed() * Gdx.graphics.getDeltaTime();
+
             if (Gdx.input.isKeyPressed(Keys.LEFT)) {
-                triangle.setX(triangle.getX() - 200 * Gdx.graphics.getDeltaTime());
+                triangle.setX(triangle.getX() - moveSpeed);
             }
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
-                triangle.setX(triangle.getX() + 200 * Gdx.graphics.getDeltaTime());
-            }
-            // Ensure the Triangle stays within the screen boundaries
-            if (triangle.getX() < 0) {
-                triangle.setX(0);
-            }
-            if (triangle.getX() > Gdx.graphics.getWidth() - triangle.getTexture().getWidth()) {
-                triangle.setX(Gdx.graphics.getWidth() - triangle.getTexture().getWidth());
+                triangle.setX(triangle.getX() + moveSpeed);
             }
         }
     }
+
+
 
     private void moveCircle(MathOptions mOptions) {
         // Circle movement logic

@@ -19,13 +19,14 @@ public abstract class Entity {
 	}
 	
 	//Create Entity
-	public Entity(float x,float y ,Color color, float speed, int health) {
-		this.x = x;
-		this.y = y;
-		this.color = color;
-		this.speed = speed;
-		this.health = health;
+	public Entity(float x, float y, Color color, float speed, int health) {
+	    this.x = x;
+	    this.y = y;
+	    this.color = color;
+	    this.speed = (speed <= 0) ? 100.0f : speed; // ✅ Ensure speed is never 0.0
+	    this.health = health;
 	}
+
 
 	//Return x value
 	public float getX() {

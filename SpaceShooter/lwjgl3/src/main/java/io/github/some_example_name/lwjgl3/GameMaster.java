@@ -57,14 +57,13 @@ public class GameMaster extends ApplicationAdapter {
     // Resets the game
     public void resetGame() {
         countdownTime = 3;
-        
         MathOptions.resetScore();
-        // Reinitialize game entities
         
-        // Reset the frozen time state when restarting
         TimeFreeze.setTimeFrozen(false);
         
-        triangle = new Triangle("Player.png", 200, 5, 0, 3);
+        float initialSpeed = 20.0f;
+        triangle = new Triangle("Player.png", 200, 5, initialSpeed, 3);
+
         trProj = new TriangleProjectile(Color.BLUE, 10, 1, triangle);
 
         entityManager = new EntityManager();
@@ -72,6 +71,8 @@ public class GameMaster extends ApplicationAdapter {
         entityManager.addEntities(mOptions);
         entityManager.addEntities(trProj);
     }
+
+
 
     @Override
     public void render() {
