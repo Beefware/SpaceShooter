@@ -14,6 +14,8 @@ import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.SceneManager.SceneManager;
 import io.github.some_example_name.lwjgl3.SceneManager.TitleScreen;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupAudioListener;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupManager;
 import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
 
 public class GameMaster extends ApplicationAdapter {
@@ -42,14 +44,19 @@ public class GameMaster extends ApplicationAdapter {
         SoundEffect correctSound = new SoundEffect("correct.wav");
         SoundEffect wrongSound = new SoundEffect("wrong.wav");
         SoundEffect collisionSound = new SoundEffect("impacteffect.wav");
+        SoundEffect lifeSound = new SoundEffect("lifepowerup.wav");
+        SoundEffect powerSound = new SoundEffect("generalpowerup.wav");
         audioManager.addSoundEffect("correct", correctSound);
         audioManager.addSoundEffect("wrong", wrongSound);
         audioManager.addSoundEffect("collision", collisionSound);
+        audioManager.addSoundEffect("life", lifeSound);
+        audioManager.addSoundEffect("power", powerSound);
         System.out.println("Loaded sound effects:");
         for (String key : audioManager.getSoundEffects().keySet()) {
             System.out.println("- " + key);
         }
         sceneManager = new SceneManager(this, audioManager);
+        PowerupManager.getInstance().addCollectionListener(new PowerupAudioListener(audioManager));
         
      // Add TitleScreen scene to the scene manager
         sceneManager.setCurrentScene(new TitleScreen(sceneManager));

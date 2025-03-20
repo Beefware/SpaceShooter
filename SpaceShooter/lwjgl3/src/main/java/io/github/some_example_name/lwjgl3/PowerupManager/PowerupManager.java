@@ -24,6 +24,7 @@ public class PowerupManager {
     private static float powerupTimer = 0; // Time left for power-up
     private static float maxPowerupDuration = 0; // Total duration of power-up
     private static boolean powerupActive = false; // Is a power-up currently active?
+    private List<PowerupCollectionListener> listeners = new ArrayList<>();
     private ShapeRenderer shapeRenderer;
 
     public List<Powerup> getPowerups() {
@@ -49,6 +50,20 @@ public class PowerupManager {
         powerupTimer = duration;
         maxPowerupDuration = duration;
         powerupActive = true;
+    }
+    
+    public void addCollectionListener(PowerupCollectionListener listener) {
+        listeners.add(listener);
+    }
+    
+    public void removeCollectionListener(PowerupCollectionListener listener) {
+        listeners.remove(listener);
+    }
+    
+    private void notifyPowerupCollected(Powerup powerup) {
+        for (PowerupCollectionListener listener : listeners) {
+            listener.onPowerupCollected(powerup);
+        }
     }
 
     // Schedule next spawn
@@ -144,6 +159,8 @@ public class PowerupManager {
                     ((TimeFreeze) p).applyEffect();
                     System.out.println("❄️ TimeFreeze power-up activated!");
                 }
+                
+                notifyPowerupCollected(p);
 
                 iterator.remove(); // Remove power-up after collection
             }
