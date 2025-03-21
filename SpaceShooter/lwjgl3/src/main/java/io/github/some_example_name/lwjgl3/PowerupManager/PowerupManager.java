@@ -95,12 +95,12 @@ public class PowerupManager {
         if (randomChoice == 0) {
             newPowerup = new ExtraLife(safeX, safeY, 10, 2);
             System.out.println("✅ Spawned ExtraLife at (" + safeX + ", " + safeY + ")");
-//        } else if (randomChoice == 1) {
-//            newPowerup = new HintPowerup(safeX, safeY, 10, 2);
-//            System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
-//        } else if (randomChoice == 2) {
-//            newPowerup = new TimeFreeze(safeX, safeY, 10, 2);
-//            System.out.println("❄️ Spawned TimeFreeze at (" + safeX + ", " + safeY + ")");
+        } else if (randomChoice == 1) {
+            newPowerup = new HintPowerup(safeX, safeY, 10, 2);
+            System.out.println("💡 Spawned HintPowerup at (" + safeX + ", " + safeY + ")");
+        } else if (randomChoice == 2) {
+            newPowerup = new TimeFreeze(safeX, safeY, 10, 2);
+            System.out.println("❄️ Spawned TimeFreeze at (" + safeX + ", " + safeY + ")");
         } else {
             newPowerup = new PlayerSpeed(safeX, safeY, 10, 2);
             System.out.println("⚡ Spawned PlayerSpeed at (" + safeX + ", " + safeY + ")");

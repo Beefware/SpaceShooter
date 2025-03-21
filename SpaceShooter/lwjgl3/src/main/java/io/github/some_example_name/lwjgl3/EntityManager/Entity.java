@@ -23,7 +23,7 @@ public abstract class Entity {
 	    this.x = x;
 	    this.y = y;
 	    this.color = color;
-	    this.speed = (speed <= 0) ? 100.0f : speed; // ✅ Ensure speed is never 0.0
+	    this.speed = (speed <= 0) ? 200.0f : speed; // ✅ Ensure speed is never 0.0
 	    this.health = health;
 	}
 
