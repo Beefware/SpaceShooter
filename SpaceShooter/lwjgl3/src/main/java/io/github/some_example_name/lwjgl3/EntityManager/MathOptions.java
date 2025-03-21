@@ -300,69 +300,42 @@ public class MathOptions extends Circle {
         score = 0;
     }
 
-    public void damage() {
-        if (!circleHit) {
-            this.setY(700);
-            score += 1;
-            difficulty();
-            randomQuestionGenerator(topic);
-            circleHit = true;
-        }
+    public void correctOptionHit() {
+    	 this.setY(700);
+         score += 1;
+         difficulty();
+         randomQuestionGenerator(topic);
+         circleHit = true;
     }
 
     public void hitBorder() {
-        if (!circleHit) {
-            this.setColor(Color.SALMON);
-            randomQuestionGenerator(topic);
-            circleHit = true;
-        }
+    	 this.setY(700);
+         randomQuestionGenerator(topic);
+         circleHit = true;
     }
 
     public boolean circleHit() {
         return circleHit;
     }
 		
-		//Sets Circle color back to red and set enemy is not hit.
-		public void respawn() {
-			this.setColor(Color.RED);
-			circleHit=false;
+	//Sets Circle color back to red and set enemy is not hit.
+	public void respawn() {
+		circleHit=false;
 
+	}
+	
+
+	
+	//Print out the score and and new random respawn point if circle hit
+	public void update() {		
+		if(score>9) {
+			this.setMovement(true);
 		}
-		
-		public void setJustHitByProjectile(boolean value) {
-		    this.justHitByProjectile = value;
-		}
 
-		public boolean isJustHitByProjectile() {
-		    return justHitByProjectile;
-		}
-
-		
-		//Print out the score and and new random respawn point if circle hit
-		public void update() {		
-			if(score>9) {
-				this.setMovement(true);
-			}
-			
-			
-			if(this.getColor()==Color.SALMON) {
-				setY(700);
-
-//				 // Schedule a task to run after a 3 second delay
-//			    Timer.schedule(new Timer.Task() {
-//			        @Override
-//			        public void run() {
-//			        	setY(700);
-//			        	
-//			        }
-//			    }, 1); // Delay in seconds
-
-			}
-
-		}
-		
-		public void dispose() {
-			this.dispose();
-		}
+	}
+	
+	public void dispose() {
+		this.dispose();
+	}
 	
 }

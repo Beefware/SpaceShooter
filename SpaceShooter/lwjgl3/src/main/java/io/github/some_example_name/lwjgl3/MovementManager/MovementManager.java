@@ -48,11 +48,7 @@ public class MovementManager {
         // Circle movement logic
         if (!mOptions.circleHit()) {
         	mOptions.setY(mOptions.getY()-mOptions.getSpeed());
-//            // Move Circle downwards if it's above the minimum Y position
-//            if (circle.getY() > 400) { // 400 is used as a default for minY
-//                circle.setY(circle.getY() - 10);
-//            }
-//
+
          // Check boundaries and toggle direction
             if (mOptions.getOption2X()+mOptions.getTexture().getWidth() > Gdx.graphics.getWidth()) {
             	mOptions.setMoveRight(false); // Change direction to left

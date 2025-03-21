@@ -24,7 +24,7 @@ public class CollisionManager {
         if (triangleProjectile.getBounds().overlaps(mOptions.getBounds1())) {
             // If left mOptions is correct option, add a point and reset
             if (mOptions.isOption1()) {
-                mOptions.damage();
+                mOptions.correctOptionHit();
                 // Schedule a task to respawn mOptions after a 3-second delay
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -48,7 +48,7 @@ public class CollisionManager {
         if (triangleProjectile.getBounds().overlaps(mOptions.getBounds2())) {
             // If right mOptions is correct, add a point and reset
             if (mOptions.isOption2()) {
-                mOptions.damage();
+                mOptions.correctOptionHit();
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {

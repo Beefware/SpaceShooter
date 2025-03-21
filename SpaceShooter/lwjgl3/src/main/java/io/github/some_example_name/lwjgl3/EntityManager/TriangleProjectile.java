@@ -95,7 +95,7 @@ public class TriangleProjectile extends Entity {
 
                 if (this.getBounds().overlaps(mOptions.getBounds1())) {
                     if (mOptions.isOption1()) {
-                        mOptions.damage();
+                        mOptions.correctOptionHit();
                     } else {
                         triangle.damage();
                     }
@@ -105,7 +105,7 @@ public class TriangleProjectile extends Entity {
                 } 
                 else if (this.getBounds().overlaps(mOptions.getBounds2())) { // ✅ else if prevents double check
                     if (mOptions.isOption2()) {
-                        mOptions.damage();
+                        mOptions.correctOptionHit();
                     } else {
                         triangle.damage();
                     }
