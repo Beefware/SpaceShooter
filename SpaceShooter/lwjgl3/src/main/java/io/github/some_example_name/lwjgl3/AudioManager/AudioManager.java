@@ -4,25 +4,55 @@ package io.github.some_example_name.lwjgl3.AudioManager;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+
 public class AudioManager {
-	private boolean isMuted = false;
+	 private static AudioManager instance;
+	 private boolean isMuted = false;
 	 private IAudioPlayer backgroundMusic;  // For background music
 	 private Map<String, ISoundEffect> soundEffects;
 	 private float musicVolume;      // Volume control for background music
 	 private float soundVolume;      // Volume control for sound effects
 	 
+	 public static AudioManager getInstance() {
+		 if (instance == null) {
+			 instance = new AudioManager();
+		 }
+		 return instance;
+	 }
 	 // Audio Manager Constructor
 	 public AudioManager() {
 		 System.out.println("AudioManager created!");
 		 this.musicVolume = 1.0f; // Default music volume
 		 this.soundVolume = 1.0f; // Default sound volume
-		 this.soundEffects = new HashMap<>();	     
+		 this.soundEffects = new HashMap<>();
+		 
+		 loadDefaultSounds();
 	 }
+	 
+	 public void loadDefaultSounds() {
+		 loadSoundEffect("life", "lifepowerup.wav");
+		 loadSoundEffect("power", "generalpowerup.wav");
+		 loadSoundEffect("collision", "impacteffect.wav");
+		 loadSoundEffect("correct", "correct.wav");
+		 loadSoundEffect("wrong", "extralife.wav");
+	 }
+	 
+	 public void loadSoundEffect(String name, String filePath) {
+		    try {
+		        ISoundEffect soundEffect = new SoundEffect(filePath);
+		        addSoundEffect(name, soundEffect);
+		        System.out.println("Loaded sound effect: " + name);
+		    } catch (Exception e) {
+		        System.err.println("Failed to load sound effect: " + name + " - " + e.getMessage());
+		    }
+		}
 	 
 	 public float getMusicVolume() {
 		 return musicVolume;
 	 }
-	 
+		 
 	 // Set Audio Volume
 	 public void setMusicVolume(float volume) {
 	        this.musicVolume = volume;
