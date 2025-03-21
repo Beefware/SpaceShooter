@@ -2,6 +2,7 @@ package io.github.some_example_name.lwjgl3.SceneManager;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -29,8 +30,10 @@ public class OptionsScene extends Scene{
     private SceneManager sceneManager;
     private float musicVolume = 1.0f;
     private float soundVolume = 1.0f;
-    private static final float MIN_VOLUME = 0.1f; 
-    private static final float MAX_VOLUME = 1.1f;
+    private final float[] VOLUME_STEPS = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f};
+    private int currentMusicVolumeStep = 9;
+    private int currentSoundVolumeStep = 9;
+    private final Preferences prefs = Gdx.app.getPreferences("MyGamePreferences");
 
     private boolean soundEnabled = true;
     private AudioManager audioManager;
@@ -79,7 +82,7 @@ public class OptionsScene extends Scene{
         batch.end();
         drawButton(volumeSliderBounds, "Music Volume: " + (int) (musicVolume * 100) + "%");
         drawButton(soundSliderBounds, "Effects Volume: " + (int) (soundVolume * 100) + "%");
-        drawButton(soundToggleBounds, "Mute: " + (soundEnabled ? "On" : "Off"));
+        drawButton(soundToggleBounds, "Mute: " + (soundEnabled ? "Off" : "On"));
         drawButton(backButtonBounds, "Back");
         
     }
@@ -91,20 +94,22 @@ public class OptionsScene extends Scene{
             int mouseX = Gdx.input.getX();
             int mouseY = Gdx.graphics.getHeight() - Gdx.input.getY();
             if (volumeSliderBounds.contains(mouseX, mouseY)) {
-                musicVolume += 0.1f;
-                if (musicVolume > MAX_VOLUME) {
-                    musicVolume = MIN_VOLUME;
-                }
+            	currentMusicVolumeStep = (currentMusicVolumeStep + 1) % VOLUME_STEPS.length;
+                musicVolume = VOLUME_STEPS[currentMusicVolumeStep];
                 audioManager.setMusicVolume(musicVolume);
+                prefs.putFloat("musicVolume", musicVolume);
+                prefs.flush();
             } else if (soundSliderBounds.contains(mouseX, mouseY)) {
-                soundVolume += 0.1f;
-                if (soundVolume > MAX_VOLUME) {
-                    soundVolume = MIN_VOLUME;
-                }
+            	currentSoundVolumeStep = (currentSoundVolumeStep + 1) % VOLUME_STEPS.length;
+                soundVolume = VOLUME_STEPS[currentSoundVolumeStep];
                 audioManager.setSoundVolume(soundVolume);
+                prefs.putFloat("soundVolume", soundVolume);
+                prefs.flush();
             } else if (soundToggleBounds.contains(mouseX, mouseY)) {
                 soundEnabled = !soundEnabled;
                 audioManager.muteAll();
+                prefs.putBoolean("soundEnabled", soundEnabled);
+                prefs.flush();
             } else if (backButtonBounds.contains(mouseX, mouseY)) {
             	Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);

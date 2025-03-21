@@ -109,7 +109,7 @@ public class GameScene extends Scene {
         	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, mOptions);
         	
         	if(projectileCollision == CollisionResult.NO_COLLISION) {
-        		 borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
+        		borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
         	}
         	
         	if (projectileCollision == CollisionResult.CORRECT_OPTION) {
