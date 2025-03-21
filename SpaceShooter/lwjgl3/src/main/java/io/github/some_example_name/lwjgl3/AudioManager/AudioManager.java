@@ -36,6 +36,7 @@ public class AudioManager {
 		 loadSoundEffect("collision", "impacteffect.wav");
 		 loadSoundEffect("correct", "correct.wav");
 		 loadSoundEffect("wrong", "wrong.wav");
+		 loadBackgroundMusic("background", "background_music.wav");
 	 }
 	 
 	 public void loadSoundEffect(String name, String filePath) {
@@ -45,6 +46,17 @@ public class AudioManager {
 		        System.out.println("Loaded sound effect: " + name);
 		    } catch (Exception e) {
 		        System.err.println("Failed to load sound effect: " + name + " - " + e.getMessage());
+		    }
+	 }
+	 
+	 public void loadBackgroundMusic(String name, String filePath) {
+		    try {
+		        MusicPlayer backgroundMusic = new MusicPlayer(filePath);
+		        setBackgroundMusic(backgroundMusic);
+		        backgroundMusic.play();
+		        System.out.println("Loaded background music: " + name);
+		    } catch (Exception e) {
+		        System.err.println("Failed to load background music: " + name + " - " + e.getMessage());
 		    }
 	 }
 	 
