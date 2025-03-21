@@ -62,6 +62,11 @@ public class TriangleProjectile extends Entity {
 
     public void movement() {
     }
+    
+    public void reset() {
+    	this.setY(this.getTriangle().getY());
+        this.setX(this.getTriangle().getX()+50);
+    }
 
     public void update() {
     	if (!shouldRemove) {

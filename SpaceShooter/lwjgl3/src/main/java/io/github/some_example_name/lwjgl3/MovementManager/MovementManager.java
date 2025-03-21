@@ -83,8 +83,7 @@ public class MovementManager {
 
         }
         if (!projectile.getTriangle().isGameOver() && projectile.getY() > 600) {
-            projectile.setY(projectile.getTriangle().getY());
-            projectile.setX(projectile.getTriangle().getX()+50);
+            projectile.reset();
         }
     }
 

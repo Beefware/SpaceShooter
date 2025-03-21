@@ -108,9 +108,9 @@ public class GameScene extends Scene {
         	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
         	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, mOptions);
         	
+        	
         	borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
    		 	
-        	
         	if (projectileCollision == CollisionResult.CORRECT_OPTION) {
         	    System.out.println("Correct answer! Playing 'correct' sound.");
         	    audioManager.playSoundEffect("correct");
