@@ -25,7 +25,6 @@ public class CollisionManager {
             // If left mOptions is correct option, add a point and reset
             if (mOptions.isOption1()) {
                 mOptions.damage();
-                mOptions.setJustHitByProjectile(true);
                 // Schedule a task to respawn mOptions after a 3-second delay
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -36,15 +35,10 @@ public class CollisionManager {
                 TimeFreeze.endTimeFreeze();
                 return CollisionResult.CORRECT_OPTION;
 
-            } else if (!mOptions.isOption1() && !triangleProjectile.getTriangle().isDamaged()) {
-                triangleProjectile.getTriangle().damage();
-                mOptions.setJustHitByProjectile(true);
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        triangleProjectile.getTriangle().resetDamageFlag();
-                    }
-                }, 2);
+            } else if (!mOptions.isOption1()) {
+
+            	triangleProjectile.getTriangle().damage();
+            	triangleProjectile.getTriangle().immunity();
                 TimeFreeze.endTimeFreeze();
                 return CollisionResult.WRONG_OPTION;
             }
@@ -54,7 +48,6 @@ public class CollisionManager {
         if (triangleProjectile.getBounds().overlaps(mOptions.getBounds2())) {
             // If right mOptions is correct, add a point and reset
             if (mOptions.isOption2()) {
-                mOptions.setJustHitByProjectile(true);
                 mOptions.damage();
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -65,15 +58,9 @@ public class CollisionManager {
                 TimeFreeze.endTimeFreeze();
                 return CollisionResult.CORRECT_OPTION;
 
-            } else if (!mOptions.isOption2() && !triangleProjectile.getTriangle().isDamaged()) {
+            } else if (!mOptions.isOption2()) {
                 triangleProjectile.getTriangle().damage();
-                mOptions.setJustHitByProjectile(true);
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        triangleProjectile.getTriangle().resetDamageFlag();
-                    }
-                }, 2);
+            	triangleProjectile.getTriangle().immunity();
                 TimeFreeze.endTimeFreeze();
                 return CollisionResult.WRONG_OPTION;
             }
@@ -86,11 +73,12 @@ public class CollisionManager {
     public static boolean checkCirclesBorderCollision(MathOptions mOptions, Triangle triangle) {
         if (mOptions.getY() < 60 && !triangle.isDamaged()) {
             triangle.damage();
+        	triangle.immunity();
+
             mOptions.hitBorder();
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
-                    triangle.resetDamageFlag();
                     mOptions.respawn();
                 }
             }, 0.5f);

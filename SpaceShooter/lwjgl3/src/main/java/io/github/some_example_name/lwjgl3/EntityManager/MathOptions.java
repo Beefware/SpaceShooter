@@ -302,7 +302,7 @@ public class MathOptions extends Circle {
 
     public void damage() {
         if (!circleHit) {
-            this.setColor(Color.SALMON);
+            this.setY(700);
             score += 1;
             difficulty();
             randomQuestionGenerator(topic);
