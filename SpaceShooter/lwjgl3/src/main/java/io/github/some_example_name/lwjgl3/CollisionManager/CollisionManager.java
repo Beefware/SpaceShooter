@@ -25,6 +25,7 @@ public class CollisionManager {
             // If left mOptions is correct option, add a point and reset
             if (mOptions.isOption1()) {
                 mOptions.correctOptionHit();
+                triangleProjectile.reset();
                 // Schedule a task to respawn mOptions after a 3-second delay
                 Timer.schedule(new Timer.Task() {
                     @Override
@@ -36,9 +37,11 @@ public class CollisionManager {
                 return CollisionResult.CORRECT_OPTION;
 
             } else if (!mOptions.isOption1()) {
+                triangleProjectile.reset();
 
             	triangleProjectile.getTriangle().damage();
             	triangleProjectile.getTriangle().immunity();
+
                 TimeFreeze.endTimeFreeze();
                 return CollisionResult.WRONG_OPTION;
             }
@@ -49,6 +52,8 @@ public class CollisionManager {
             // If right mOptions is correct, add a point and reset
             if (mOptions.isOption2()) {
                 mOptions.correctOptionHit();
+                triangleProjectile.reset();
+
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
@@ -59,6 +64,8 @@ public class CollisionManager {
                 return CollisionResult.CORRECT_OPTION;
 
             } else if (!mOptions.isOption2()) {
+                triangleProjectile.reset();
+
                 triangleProjectile.getTriangle().damage();
             	triangleProjectile.getTriangle().immunity();
                 TimeFreeze.endTimeFreeze();
@@ -71,7 +78,7 @@ public class CollisionManager {
 
     // ✅ Check if mOptions hit the bottom
     public static boolean checkCirclesBorderCollision(MathOptions mOptions, Triangle triangle) {
-        if (mOptions.getY() < 60) {
+        if (mOptions.getY()-mOptions.getTexture().getHeight()/2 < triangle.getTexture().getHeight()) {
             triangle.damage();
         	triangle.immunity();
 
