@@ -78,7 +78,7 @@ public class CollisionManager {
 
     // ✅ Check if mOptions hit the bottom
     public static boolean checkCirclesBorderCollision(MathOptions mOptions, Triangle triangle) {
-        if (mOptions.getY() < 60) {
+        if (mOptions.getY()-mOptions.getTexture().getHeight()/2 < triangle.getTexture().getHeight()) {
             triangle.damage();
         	triangle.immunity();
 
