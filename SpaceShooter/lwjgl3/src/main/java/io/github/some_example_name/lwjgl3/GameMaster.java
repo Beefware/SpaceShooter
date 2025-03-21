@@ -41,16 +41,7 @@ public class GameMaster extends ApplicationAdapter {
         audioManager.setBackgroundMusic(backgroundMusic);
         audioManager.playBackgroundMusic();
         // Load sound effects
-        SoundEffect correctSound = new SoundEffect("correct.wav");
-        SoundEffect wrongSound = new SoundEffect("wrong.wav");
-        SoundEffect collisionSound = new SoundEffect("impacteffect.wav");
-        SoundEffect lifeSound = new SoundEffect("lifepowerup.wav");
-        SoundEffect powerSound = new SoundEffect("generalpowerup.wav");
-        audioManager.addSoundEffect("correct", correctSound);
-        audioManager.addSoundEffect("wrong", wrongSound);
-        audioManager.addSoundEffect("collision", collisionSound);
-        audioManager.addSoundEffect("life", lifeSound);
-        audioManager.addSoundEffect("power", powerSound);
+        audioManager.loadDefaultSounds();
         System.out.println("Loaded sound effects:");
         for (String key : audioManager.getSoundEffects().keySet()) {
             System.out.println("- " + key);
