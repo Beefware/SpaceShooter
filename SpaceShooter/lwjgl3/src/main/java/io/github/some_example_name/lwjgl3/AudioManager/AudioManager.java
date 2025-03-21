@@ -27,7 +27,6 @@ public class AudioManager {
 		 this.musicVolume = 1.0f; // Default music volume
 		 this.soundVolume = 1.0f; // Default sound volume
 		 this.soundEffects = new HashMap<>();
-		 
 		 loadDefaultSounds();
 	 }
 	 
@@ -36,7 +35,7 @@ public class AudioManager {
 		 loadSoundEffect("power", "generalpowerup.wav");
 		 loadSoundEffect("collision", "impacteffect.wav");
 		 loadSoundEffect("correct", "correct.wav");
-		 loadSoundEffect("wrong", "extralife.wav");
+		 loadSoundEffect("wrong", "wrong.wav");
 	 }
 	 
 	 public void loadSoundEffect(String name, String filePath) {
@@ -47,7 +46,7 @@ public class AudioManager {
 		    } catch (Exception e) {
 		        System.err.println("Failed to load sound effect: " + name + " - " + e.getMessage());
 		    }
-		}
+	 }
 	 
 	 public float getMusicVolume() {
 		 return musicVolume;
