@@ -53,16 +53,6 @@ public class Triangle extends Entity {
       }, 3);
     }
 
-    // Return isHit if Collision
-    public boolean isDamaged() {
-        return isHit;
-    }
-
-    // Ensure bullet collision is only detected once
-    public void resetDamageFlag() {
-        this.setTexture(new Texture("Player.png"));
-        isHit = false;
-    }
 
     // Set Game Over
     public boolean isGameOver() {
