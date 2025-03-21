@@ -33,6 +33,12 @@ public class MovementManager {
             if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
                 triangle.setX(triangle.getX() + moveSpeed);
             }
+            if (triangle.getX() < 0) {
+                triangle.setX(0);
+            }
+            if (triangle.getX() > Gdx.graphics.getWidth() - triangle.getTexture().getWidth()) {
+                triangle.setX(Gdx.graphics.getWidth() - triangle.getTexture().getWidth());
+            }
         }
     }
 

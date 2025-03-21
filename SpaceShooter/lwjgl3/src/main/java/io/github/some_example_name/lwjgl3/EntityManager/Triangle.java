@@ -3,6 +3,7 @@ package io.github.some_example_name.lwjgl3.EntityManager;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Timer;
 
 public class Triangle extends Entity {
     private Texture tex;
@@ -37,9 +38,19 @@ public class Triangle extends Entity {
     public void damage() {
         if (!this.getTexture().toString().equals("PlayerHealing.png")) {
             this.setHealth(getHealth() - 1);
+            //isHit = true;
             this.setTexture(new Texture("PlayerHealing.png"));
-            isHit = true;
         }
+    }
+    
+    public void immunity() {
+    	this.setTexture(new Texture("PlayerHealing.png"));
+    	Timer.schedule(new Timer.Task() {
+          @Override
+          public void run() {
+             setTexture(new Texture("Player.png"));
+          }
+      }, 3);
     }
 
     // Return isHit if Collision
