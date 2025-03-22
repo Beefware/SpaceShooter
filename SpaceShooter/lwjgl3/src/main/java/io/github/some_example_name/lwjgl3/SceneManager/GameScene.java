@@ -38,7 +38,7 @@ public class GameScene extends Scene {
     private int topic;
     
     private int bgheight=0;
-
+    private boolean borderCollision = false;
     private boolean isPaused = false;  // Flag to track if the game is paused
     
 
@@ -104,16 +104,10 @@ public class GameScene extends Scene {
     public void update() {
     	
         if (!isPaused) {
-        	boolean borderCollision = false;
         	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
         	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, mOptions);
-        	
-        	if(projectileCollision == CollisionResult.NO_COLLISION) {
-        		borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
-        	}
-        	
         	borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);
-   		 	
+        	
         	if (projectileCollision == CollisionResult.CORRECT_OPTION) {
         	    System.out.println("Correct answer! Playing 'correct' sound.");
         	    audioManager.playSoundEffect("correct");

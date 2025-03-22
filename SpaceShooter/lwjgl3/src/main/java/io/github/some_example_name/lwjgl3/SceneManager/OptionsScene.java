@@ -33,7 +33,7 @@ public class OptionsScene extends Scene{
     private final float[] VOLUME_STEPS = {0.1f, 0.2f, 0.3f, 0.4f, 0.5f, 0.6f, 0.7f, 0.8f, 0.9f, 1.0f};
     private int currentMusicVolumeStep = 9;
     private int currentSoundVolumeStep = 9;
-    private final Preferences prefs = Gdx.app.getPreferences("MyGamePreferences");
+    //private final Preferences prefs = Gdx.app.getPreferences("MyGamePreferences");
 
     private boolean soundEnabled = true;
     private AudioManager audioManager;
@@ -80,8 +80,8 @@ public class OptionsScene extends Scene{
         buttonFont.getData().setScale(scale);
         
         batch.end();
-        drawButton(volumeSliderBounds, "Music Volume: " + (int) (musicVolume * 100) + "%");
-        drawButton(soundSliderBounds, "Effects Volume: " + (int) (soundVolume * 100) + "%");
+        drawButton(volumeSliderBounds, "Music Volume: " + (int) (audioManager.getMusicVolume() * 100) + "%");
+        drawButton(soundSliderBounds, "Effects Volume: " + (int) (audioManager.getSoundVolume() * 100) + "%");
         drawButton(soundToggleBounds, "Mute: " + (soundEnabled ? "Off" : "On"));
         drawButton(backButtonBounds, "Back");
         
@@ -97,19 +97,19 @@ public class OptionsScene extends Scene{
             	currentMusicVolumeStep = (currentMusicVolumeStep + 1) % VOLUME_STEPS.length;
                 musicVolume = VOLUME_STEPS[currentMusicVolumeStep];
                 audioManager.setMusicVolume(musicVolume);
-                prefs.putFloat("musicVolume", musicVolume);
-                prefs.flush();
+                //prefs.putFloat("musicVolume", musicVolume);
+                //prefs.flush();
             } else if (soundSliderBounds.contains(mouseX, mouseY)) {
             	currentSoundVolumeStep = (currentSoundVolumeStep + 1) % VOLUME_STEPS.length;
                 soundVolume = VOLUME_STEPS[currentSoundVolumeStep];
                 audioManager.setSoundVolume(soundVolume);
-                prefs.putFloat("soundVolume", soundVolume);
-                prefs.flush();
+                //prefs.putFloat("soundVolume", soundVolume);
+                //prefs.flush();
             } else if (soundToggleBounds.contains(mouseX, mouseY)) {
                 soundEnabled = !soundEnabled;
-                audioManager.muteAll();
-                prefs.putBoolean("soundEnabled", soundEnabled);
-                prefs.flush();
+                audioManager.muteAll(musicVolume,soundVolume);
+                //prefs.putBoolean("soundEnabled", soundEnabled);
+                //prefs.flush();
             } else if (backButtonBounds.contains(mouseX, mouseY)) {
             	Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);

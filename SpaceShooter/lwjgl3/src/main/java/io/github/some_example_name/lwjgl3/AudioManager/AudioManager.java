@@ -66,10 +66,11 @@ public class AudioManager {
 		 
 	 // Set Audio Volume
 	 public void setMusicVolume(float volume) {
-	        this.musicVolume = volume;
-	        for (ISoundEffect effect : soundEffects.values()) {
-	            effect.setVolume(volume);
-	        }
+		 this.musicVolume = volume;
+		 if (!isMuted) {
+			 backgroundMusic.setVolume(volume); 
+		 }
+	        
 	 }
 	 
 	 public float getSoundVolume() {
@@ -111,7 +112,7 @@ public class AudioManager {
 	    }
 	}
 	
-	public void muteAll() {
+	public void muteAll(float musicvol, float soundvol) {
 		isMuted = !isMuted;
 		
 		if(isMuted) {
@@ -121,10 +122,11 @@ public class AudioManager {
 	        }
 		} else {
 			if (backgroundMusic != null) {
-                backgroundMusic.setVolume(musicVolume);
+				System.out.println(musicvol);
+                backgroundMusic.setVolume(musicvol);
             }
             for (ISoundEffect effect : soundEffects.values()) {
-                effect.setVolume(soundVolume);
+                effect.setVolume(soundvol);
             }
 		}
 		

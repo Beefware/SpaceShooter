@@ -81,7 +81,6 @@ public class CollisionManager {
         if (mOptions.getY()-mOptions.getTexture().getHeight()/2 < triangle.getTexture().getHeight()) {
             triangle.damage();
         	triangle.immunity();
-
             mOptions.hitBorder();
             Timer.schedule(new Timer.Task() {
                 @Override
@@ -89,6 +88,7 @@ public class CollisionManager {
                     mOptions.respawn();
                 }
             }, 0.5f);
+            System.out.println("Checked");
             return true;
         }
         return false;
