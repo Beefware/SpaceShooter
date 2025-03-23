@@ -2,6 +2,7 @@ package io.github.some_example_name.lwjgl3.SceneManager;
 
 import com.badlogic.gdx.Gdx;
 
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -9,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.files.FileHandle;
 
 import io.github.some_example_name.lwjgl3.AudioManager.AudioManager;
 import io.github.some_example_name.lwjgl3.CollisionManager.CollisionManager;
@@ -67,6 +69,16 @@ public class GameScene extends Scene {
         gameBackground = new Texture("space_black.jpg");
         
         movementManager = new MovementManager();
+    }
+    
+    private void saveScoreToFile(int score) {
+        FileHandle file = Gdx.files.local("score.txt");
+
+        // Append the score with a new line each time
+        String scoreLine = score + "\n";
+
+        // Append to the file (or create it if it doesn't exist)
+        file.writeString(scoreLine, true);
     }
 
     @Override
@@ -128,6 +140,7 @@ public class GameScene extends Scene {
 
 
             if (triangle.getHealth() < 1) {
+            	saveScoreToFile(score);
             	Scene gameOverScene = new GameOverScene(sceneManager, topic);
             	sceneManager.setCurrentScene(gameOverScene);
             }
