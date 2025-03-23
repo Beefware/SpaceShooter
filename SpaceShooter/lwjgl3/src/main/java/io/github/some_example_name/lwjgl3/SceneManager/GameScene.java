@@ -104,6 +104,12 @@ public class GameScene extends Scene {
     public void update() {
     	
         if (!isPaused) {
+        	
+        	if(trProj.isJustFired()) {
+        		audioManager.playSoundEffect("fire");
+        		trProj.setJustFired(false);
+        	}
+        	
         	CollisionResult projectileCollision = CollisionResult.NO_COLLISION;
         	projectileCollision = CollisionManager.checkTriangleProjectileCollision(trProj, mOptions);
         	borderCollision = CollisionManager.checkCirclesBorderCollision(mOptions, triangle);

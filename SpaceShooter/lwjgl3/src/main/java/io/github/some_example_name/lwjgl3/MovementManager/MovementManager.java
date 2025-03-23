@@ -75,7 +75,7 @@ public class MovementManager {
         if (Gdx.input.isKeyPressed(Keys.SPACE) && projectile.getY()==5) {
         	projectile.setX(projectile.getTriangle().getX()+50);
             //projectile.setColor(Color.BLUE);
-
+        	projectile.setJustFired(true);
             projectile.setY(projectile.getY() + projectile.getSpeed());
         }
         if(projectile.getY() > 5) {

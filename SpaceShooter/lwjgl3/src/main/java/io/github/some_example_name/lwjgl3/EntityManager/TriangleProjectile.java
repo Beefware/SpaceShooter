@@ -14,6 +14,7 @@ public class TriangleProjectile extends Entity {
     private int projectileDamage;
     private Rectangle bounds;
     private boolean shouldRemove = false;
+    private boolean justFired = false;
 
     public TriangleProjectile() {
     }
@@ -66,6 +67,14 @@ public class TriangleProjectile extends Entity {
     public void reset() {
     	this.setY(this.getTriangle().getY());
         this.setX(this.getTriangle().getX()+50);
+    }
+    
+    public boolean isJustFired(){
+    	return justFired;
+    }
+    
+    public void setJustFired(boolean justFired) {
+        this.justFired = justFired;
     }
 
     public void update() {

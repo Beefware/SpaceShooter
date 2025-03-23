@@ -36,6 +36,7 @@ public class AudioManager {
 		 loadSoundEffect("collision", "impacteffect.wav");
 		 loadSoundEffect("correct", "correct.wav");
 		 loadSoundEffect("wrong", "wrong.wav");
+		 loadSoundEffect("fire", "lasershot.wav");
 		 loadBackgroundMusic("background", "background_music.wav");
 	 }
 	 
@@ -100,7 +101,7 @@ public class AudioManager {
 	 
 	 // Play background music if its not already playing
 	 public void playBackgroundMusic() {
-		 if (backgroundMusic != null) {
+		 if (this.backgroundMusic != null) {
 			 backgroundMusic.play();  // Play music
 	     }
 	 }
