@@ -35,9 +35,12 @@ public class GameMaster extends ApplicationAdapter {
         batch = new SpriteBatch();
         shape = new ShapeRenderer();
         
-        // Initialize the AudioManager
+        // Initialize the AudioManager and play background music
         audioManager = new AudioManager();
-        // Load sound effects and play background music
+        MusicPlayer backgroundMusic = new MusicPlayer("background_music.wav");
+        audioManager.setBackgroundMusic(backgroundMusic);
+        audioManager.playBackgroundMusic();
+        // Load sound effects
         audioManager.loadDefaultSounds();
         System.out.println("Loaded sound effects:");
         for (String key : audioManager.getSoundEffects().keySet()) {
@@ -65,9 +68,8 @@ public class GameMaster extends ApplicationAdapter {
         entityManager.addEntities(triangle);
         entityManager.addEntities(mOptions);
         entityManager.addEntities(trProj);
+        
     }
-
-
 
     @Override
     public void render() {

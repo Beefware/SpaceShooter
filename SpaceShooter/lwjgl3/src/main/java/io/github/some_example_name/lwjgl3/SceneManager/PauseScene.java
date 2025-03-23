@@ -1,16 +1,15 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.MathUtils;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupManager;
 
 public class PauseScene extends Scene{
 
@@ -73,6 +72,7 @@ public class PauseScene extends Scene{
             if (resumeButtonBounds.contains(mouseX, mouseY)) {
                 // Get the previously saved GameScene
                 GameScene gameScene = sceneManager.getGameScene();
+                PowerupManager.getInstance().startSpawning();
                 // Call the resume method to continue the Game
                 gameScene.resumeGame();  
                 // Switch back to the GameScene
@@ -81,6 +81,7 @@ public class PauseScene extends Scene{
             	
             } else if (quitButtonBounds.contains(mouseX, mouseY)) {
                 // Quit to title
+            	PowerupManager.getInstance().stopSpawning();
                 Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);
             }

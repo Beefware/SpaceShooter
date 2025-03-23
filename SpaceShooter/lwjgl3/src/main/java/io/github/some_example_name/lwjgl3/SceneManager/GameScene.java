@@ -144,6 +144,7 @@ public class GameScene extends Scene {
         if (Gdx.input.isKeyJustPressed(com.badlogic.gdx.Input.Keys.P)) {
             isPaused = true;
             // Save the reference to the current GameScene
+            PowerupManager.getInstance().stopSpawning(); 
             Scene currentScene = sceneManager.getCurrentScene();
             if (currentScene instanceof GameScene) {
             	// Save the current GameScene

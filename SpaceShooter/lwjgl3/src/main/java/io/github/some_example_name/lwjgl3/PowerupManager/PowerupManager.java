@@ -26,6 +26,8 @@ public class PowerupManager {
     private static boolean powerupActive = false; // Is a power-up currently active?
     private List<PowerupCollectionListener> listeners = new ArrayList<>();
     private ShapeRenderer shapeRenderer;
+    private boolean spawningStarted = false;
+    private Timer.Task spawnTask;
 
     public List<Powerup> getPowerups() {
         return powerups;
@@ -43,7 +45,6 @@ public class PowerupManager {
         random = new Random();
         shapeRenderer = new ShapeRenderer();
 
-        scheduleNextSpawn();
     }
 
     public void startPowerupTimer(float duration) {
@@ -65,20 +66,44 @@ public class PowerupManager {
             listener.onPowerupCollected(powerup);
         }
     }
+    
+    public void startSpawning() {
+        if (!spawningStarted) {
+            spawningStarted = true;
+            scheduleNextSpawn();
+            System.out.println("Powerup spawning started.");
+        }
+    }
 
-    // Schedule next spawn
+    public void stopSpawning() {
+        spawningStarted = false;
+        powerups.clear(); // explicitly clear powerups
+        if (spawnTask != null) {
+            spawnTask.cancel(); // explicitly cancel only this spawn task
+            spawnTask = null; // clear reference explicitly
+        }
+        System.out.println("Powerup spawning stopped.");
+    }
+
+    // Schedule next spawn safely and explicitly
     private void scheduleNextSpawn() {
+        if (!spawningStarted) return; // explicitly double-check
+
         float delay = random.nextFloat() * (40 - 10) + 10;
-        Timer.schedule(new Timer.Task() {
+
+        spawnTask = new Timer.Task() { // explicitly keep reference
             @Override
             public void run() {
-                int screenWidth = Gdx.graphics.getWidth(); 
+                if (!spawningStarted) return; // explicitly safe check
+                int screenWidth = Gdx.graphics.getWidth();
                 float safeX = Math.max(50, Math.min(random.nextInt(screenWidth), screenWidth - 50));
                 spawnPowerup(safeX, 600);
                 scheduleNextSpawn(); 
             }
-        }, delay);
+        };
+        Timer.schedule(spawnTask, delay);
     }
+
 
     // Spawn a power-up (ExtraLife, HintPowerup, TimeFreeze, or PlayerSpeed)
     public void spawnPowerup(float x, float y) {

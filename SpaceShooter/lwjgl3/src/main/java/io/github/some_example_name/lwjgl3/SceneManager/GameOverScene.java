@@ -1,18 +1,15 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
-import io.github.some_example_name.lwjgl3.EntityManager.Circle;
-import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
 
-import com.badlogic.gdx.ApplicationAdapter;
+import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupManager;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.MathUtils;
 
 
 public class GameOverScene extends Scene {
@@ -27,6 +24,7 @@ public class GameOverScene extends Scene {
     public GameOverScene(SceneManager sceneManager, int topic) {
     	this.sceneManager = sceneManager;
     	this.topic = topic;
+    	PowerupManager.getInstance().stopSpawning();
         gameOverFont = new BitmapFont();
         gameOverFont.getData().setScale(3);
         gameOverFont.setColor(Color.RED);
@@ -78,6 +76,7 @@ public class GameOverScene extends Scene {
                 sceneManager.setCurrentScene(countdownScene);
               // Switch to the Title Screen
             } else if (quitButtonBounds.contains(mouseX, mouseY)) {
+            	PowerupManager.getInstance().stopSpawning();
             	Scene titleScene = new TitleScreen(sceneManager);
                 sceneManager.setCurrentScene(titleScene);
             }

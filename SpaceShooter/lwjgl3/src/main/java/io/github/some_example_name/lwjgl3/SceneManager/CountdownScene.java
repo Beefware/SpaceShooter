@@ -1,16 +1,13 @@
 package io.github.some_example_name.lwjgl3.SceneManager;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.MathUtils;
+import io.github.some_example_name.lwjgl3.PowerupManager.PowerupManager;
 
 public class CountdownScene extends Scene {
 	private Texture gameBackground;
@@ -50,6 +47,7 @@ public class CountdownScene extends Scene {
         countdownTime -= Gdx.graphics.getDeltaTime();
         if (countdownTime <= 0) {
             // Transition to the game scene
+        	PowerupManager.getInstance().startSpawning();
             Scene gameScene = new GameScene(sceneManager, topic);
             sceneManager.setCurrentScene(gameScene);
             System.out.println("Topic:" + topic);
