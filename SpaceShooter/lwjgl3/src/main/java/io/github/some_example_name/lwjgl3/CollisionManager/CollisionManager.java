@@ -1,148 +1,132 @@
 package io.github.some_example_name.lwjgl3.CollisionManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.badlogic.gdx.utils.Timer;
-import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
+
 import io.github.some_example_name.lwjgl3.EntityManager.MathOptions;
-import io.github.some_example_name.lwjgl3.EntityManager.Triangle;
+import io.github.some_example_name.lwjgl3.EntityManager.Player;
 import io.github.some_example_name.lwjgl3.EntityManager.TriangleProjectile;
 import io.github.some_example_name.lwjgl3.PowerupManager.Powerup;
-import java.util.List;
-import java.util.ArrayList;
+import io.github.some_example_name.lwjgl3.PowerupManager.TimeFreeze;
 
 public class CollisionManager {
 
     public enum CollisionResult {
-        CORRECT_OPTION,
-        WRONG_OPTION,
-        NO_COLLISION
+        CORRECT_OPTION, // Collision with the correct option
+        WRONG_OPTION,   // Collision with the wrong option
+        NO_COLLISION    // No collision occurred
     }
 
- // ✅ Check if Projectile collides with MathOptions & remove it
+    // Check if a TriangleProjectile collides with MathOptions and handle the collision
     public static CollisionResult checkTriangleProjectileCollision(TriangleProjectile triangleProjectile, MathOptions mOptions) {
 
-        // If projectile and left mOptions overlap
+        // If the projectile overlaps with the left MathOptions
         if (triangleProjectile.getBounds().overlaps(mOptions.getBounds1())) {
-            // If left mOptions is correct option, add a point and reset
+            // If the left MathOptions is the correct option
             if (mOptions.isOption1()) {
-                mOptions.correctOptionHit();
-                triangleProjectile.reset();
-                // Schedule a task to respawn mOptions after a 3-second delay
+                mOptions.correctOptionHit(); // Handle correct option hit
+                triangleProjectile.reset(); // Reset the projectile
+                // Schedule a task to respawn MathOptions after a 2-second delay
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         mOptions.respawn();
                     }
                 }, 2);
-                TimeFreeze.endTimeFreeze();
+                TimeFreeze.endTimeFreeze(); // End any active time freeze
                 return CollisionResult.CORRECT_OPTION;
 
-            } else if (!mOptions.isOption1()) {
-                triangleProjectile.reset();
-
-            	triangleProjectile.getTriangle().damage();
-            	triangleProjectile.getTriangle().immunity();
-
-                TimeFreeze.endTimeFreeze();
+            } else if (!mOptions.isOption1()) { // If the left MathOptions is the wrong option
+                triangleProjectile.reset(); // Reset the projectile
+                triangleProjectile.getTriangle().damage(); // Damage the player
+                triangleProjectile.getTriangle().immunity(); // Grant temporary immunity
+                TimeFreeze.endTimeFreeze(); // End any active time freeze
                 return CollisionResult.WRONG_OPTION;
             }
         }
 
-        // If projectile and right mOptions overlap
+        // If the projectile overlaps with the right MathOptions
         if (triangleProjectile.getBounds().overlaps(mOptions.getBounds2())) {
-            // If right mOptions is correct, add a point and reset
+            // If the right MathOptions is the correct option
             if (mOptions.isOption2()) {
-                mOptions.correctOptionHit();
-                triangleProjectile.reset();
-
+                mOptions.correctOptionHit(); // Handle correct option hit
+                triangleProjectile.reset(); // Reset the projectile
+                // Schedule a task to respawn MathOptions after a 2-second delay
                 Timer.schedule(new Timer.Task() {
                     @Override
                     public void run() {
                         mOptions.respawn();
                     }
                 }, 2);
-                TimeFreeze.endTimeFreeze();
+                TimeFreeze.endTimeFreeze(); // End any active time freeze
                 return CollisionResult.CORRECT_OPTION;
 
-            } else if (!mOptions.isOption2()) {
-                triangleProjectile.reset();
-
-                triangleProjectile.getTriangle().damage();
-            	triangleProjectile.getTriangle().immunity();
-                TimeFreeze.endTimeFreeze();
+            } else if (!mOptions.isOption2()) { // If the right MathOptions is the wrong option
+                triangleProjectile.reset(); // Reset the projectile
+                triangleProjectile.getTriangle().damage(); // Damage the player
+                triangleProjectile.getTriangle().immunity(); // Grant temporary immunity
+                TimeFreeze.endTimeFreeze(); // End any active time freeze
                 return CollisionResult.WRONG_OPTION;
             }
         }
         
-        return CollisionResult.NO_COLLISION;
+        return CollisionResult.NO_COLLISION; // No collision occurred
     }
 
-    // ✅ Check if mOptions hit the bottom
-    public static boolean checkCirclesBorderCollision(MathOptions mOptions, Triangle triangle) {
-        if (mOptions.getY()-mOptions.getTexture().getHeight()/2 < triangle.getTexture().getHeight()) {
-            triangle.damage();
-        	triangle.immunity();
-            mOptions.hitBorder();
+    // Check if MathOptions hit the bottom border and handle the collision
+    public static boolean checkCirclesBorderCollision(MathOptions mOptions, Player player) {
+        // Check if MathOptions has crossed the bottom border
+        if (mOptions.getY() - mOptions.getTexture().getHeight() / 2 < player.getTexture().getHeight()) {
+        	player.damage(); // Damage the player
+        	player.immunity(); // Grant temporary immunity
+            mOptions.hitBorder(); // Handle border collision
+            // Schedule a task to respawn MathOptions after a 0.5-second delay
             Timer.schedule(new Timer.Task() {
                 @Override
                 public void run() {
                     mOptions.respawn();
                 }
             }, 0.5f);
-            System.out.println("Checked");
+            System.out.println("Checked"); // Debug message
             return true;
         }
-        return false;
+        return false; // No collision with the border
     }
 
-    // ✅ Check if player collides with power-up
-    public static boolean checkPowerupCollision(Triangle player, List<Powerup> powerups) {
-        List<Powerup> toRemove = new ArrayList<>();
+    // Check if the player collides with any power-up and handle the collision
+    public static boolean checkPowerupCollision(Player player, List<Powerup> powerups) {
+        List<Powerup> toRemove = new ArrayList<>(); // List to store power-ups to be removed
 
+        // Iterate through the power-ups
         for (Powerup powerup : new ArrayList<>(powerups)) {
+            // Check if the player overlaps with the power-up
             if (player.getBounds().overlaps(powerup.getBounds())) {
-                powerup.applyEffect();
-                toRemove.add(powerup); // ✅ Mark for removal instead of modifying the list directly
+                powerup.applyEffect(); // Apply the power-up effect
+                toRemove.add(powerup); // Mark the power-up for removal
             }
         }
 
-        powerups.removeAll(toRemove); // ✅ Remove power-ups after iteration
-        return !toRemove.isEmpty();
+        powerups.removeAll(toRemove); // Remove the marked power-ups
+        return !toRemove.isEmpty(); // Return true if any power-ups were removed
     }
 
-    // ✅ Check if projectile collides with power-up
+    // Check if a projectile collides with any power-up and handle the collision
     public static boolean checkProjectilePowerupCollision(TriangleProjectile projectile, List<Powerup> powerups) {
-        List<Powerup> toRemove = new ArrayList<>();
+        List<Powerup> toRemove = new ArrayList<>(); // List to store power-ups to be removed
 
+        // Iterate through the power-ups
         for (Powerup powerup : new ArrayList<>(powerups)) {
+            // Check if the projectile overlaps with the power-up
             if (projectile.getBounds().overlaps(powerup.getBounds())) {
-                System.out.println("💥 Projectile hit ExtraLife! Removing both.");
-                powerup.applyEffect();
-                toRemove.add(powerup); // ✅ Mark for removal
+                System.out.println("Projectile hit ExtraLife!"); // Debug message
+                powerup.applyEffect(); // Apply the power-up effect
+                toRemove.add(powerup); // Mark the power-up for removal
             }
         }
 
-        powerups.removeAll(toRemove); // ✅ Remove power-ups after iteration
-        return !toRemove.isEmpty();
+        powerups.removeAll(toRemove); // Remove the marked power-ups
+        return !toRemove.isEmpty(); // Return true if any power-ups were removed
     }
 }
-
-
-//	    public static boolean checkmOptionsProjectileCollision(mOptionsProjectile mOptionsProjectile, Triangle triangle) {
-//	        if (mOptionsProjectile.getBounds().overlaps(triangle.getBounds()) && !triangle.isDamaged()) {
-//	            triangle.damage(mOptionsProjectile.getProjectileDamage());
-//
-//	            // Schedule a task to reset Triangle damage flag after a 3-second delay
-//	            Timer.schedule(new Timer.Task() {
-//	                @Override
-//	                public void run() {
-//	                    triangle.resetDamageFlag();
-//	                }
-//	            }, 3);
-//	            
-//	            return true;
-//	        }
-//	        return false;
-//	    }
-	
-
-

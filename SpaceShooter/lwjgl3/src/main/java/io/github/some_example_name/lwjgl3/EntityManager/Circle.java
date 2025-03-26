@@ -1,74 +1,64 @@
 package io.github.some_example_name.lwjgl3.EntityManager;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.IntArray;
-import com.badlogic.gdx.utils.Timer;
-import com.badlogic.gdx.math.MathUtils;
 
-public class Circle extends Entity{
+// Circle class extends the Entity class and represents a circular entity in the game
+public class Circle extends Entity {
 	
-	private float radius;	
+	private float radius;	// Radius of the circle
 	
+	// Default constructor
 	public Circle() {
 		
 	}
 	
-	//Create Circle Entity
-	public Circle(Color color, float x,float y, float radius, float speed, int health) {
-		super(x, y, color, speed, health);
-		
-		this.radius = radius;
+	// Constructor to create a Circle entity with specified properties
+	public Circle(Color color, float x, float y, float radius, float speed, int health) {
+		super(x, y, color, speed, health); // Call the parent class constructor
+		this.radius = radius; // Set the radius of the circle
 	}
 	
-	//Return Circle Radius
+	// Getter method to return the radius of the circle
 	public float getRadius() {
 		return radius;
 	}
 
-	//Set Circle Radius
+	// Setter method to update the radius of the circle
 	public void setRadius(float radius) {
 		this.radius = radius;
 	}
 	
+	// Method to get the bounding rectangle of the circle
 	public Rectangle getBounds() {
-	    return new Rectangle(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
+		return new Rectangle(getX() - getRadius(), getY() - getRadius(), getRadius() * 2, getRadius() * 2);
 	}
 
-	//Draw Circle Sprite and Rectangle
+	// Method to draw the circle using a ShapeRenderer
 	public void draw(ShapeRenderer shape) {
-		
-
-    }
+		// Implementation for drawing the circle with ShapeRenderer
+	}
 	
-	//Draw Circle Sprite and Rectangle
+	// Method to draw the circle using a SpriteBatch
 	public void draw(SpriteBatch batch) {
-		
-    }
+		// Implementation for drawing the circle with SpriteBatch
+	}
 	
-	
-	//Circle Movement
+	// Method to handle the movement of the circle
 	public void movement() {
-		
+		// Implementation for circle movement logic
 	}
 	
-
-	//Print out the score and and new random respawn point if circle hit
+	// Method to update the circle's state (e.g., handle collisions, respawn, etc.)
 	public void update() {		
-		
-		
+		// Implementation for updating the circle's state
 	}
 	
+	// Method to dispose of resources used by the circle
 	public void dispose() {
-		this.dispose();
+		this.dispose(); // Dispose of resources (potentially incorrect recursive call)
 	}
 	
 }

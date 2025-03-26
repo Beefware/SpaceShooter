@@ -1,113 +1,108 @@
 package io.github.some_example_name.lwjgl3.EntityManager;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 
 public abstract class Entity {
-	private float x;
-	private float y;
-	private Color color;
-	private float speed;
-	private int health;
-	private Rectangle bounds;
+	private float x; // X-coordinate of the entity
+	private float y; // Y-coordinate of the entity
+	private Color color; // Color of the entity
+	private float speed; // Speed of the entity
+	private int health; // Health of the entity
+	private Rectangle bounds; // Bounding box for collision detection
 	
+	// Default constructor
 	public Entity() {
-		
 	}
 	
-	//Create Entity
+	// Constructor to initialize an entity with specific attributes
 	public Entity(float x, float y, Color color, float speed, int health) {
-	    this.x = x;
-	    this.y = y;
-	    this.color = color;
-	    this.speed = (speed <= 0) ? 200.0f : speed; // ✅ Ensure speed is never 0.0
-	    this.health = health;
+		this.x = x; // Set the X-coordinate
+		this.y = y; // Set the Y-coordinate
+		this.color = color; // Set the color
+		this.speed = (speed <= 0) ? 200.0f : speed; // Ensure speed is never 0.0
+		this.health = health; // Set the health
 	}
 
-
-	//Return x value
+	// Return the X-coordinate of the entity
 	public float getX() {
 		return x;
 	}
 
-	//Set x value
+	// Set the X-coordinate of the entity
 	public void setX(float x) {
 		this.x = x;
 	}
 
-	//return y value
+	// Return the Y-coordinate of the entity
 	public float getY() {
 		return y;
 	}
 
-	//set y value
+	// Set the Y-coordinate of the entity
 	public void setY(float y) {
 		this.y = y;
 	}
 
-	//return entity color
+	// Return the color of the entity
 	public Color getColor() {
 		return color;
 	}
 
-	//set entity color
+	// Set the color of the entity
 	public void setColor(Color color) {
 		this.color = color;
 	}
 
-	//return entity speed
+	// Return the speed of the entity
 	public float getSpeed() {
 		return speed;
 	}
 
-	//set entity speed
+	// Set the speed of the entity
 	public void setSpeed(float speed) {
 		this.speed = speed;
 	}
 
-	//return entity health
+	// Return the health of the entity
 	public int getHealth() {
 		return health;
 	}
 
-	//set entity health
+	// Set the health of the entity
 	public void setHealth(int health) {
 		this.health = health;
 	}
 	
-	//draw shapes
+	// Draw shapes for the entity (to be implemented by subclasses)
 	public void draw(ShapeRenderer shape) {
-		
 	}
 	
-	//draw sprites
+	// Draw sprites for the entity (to be implemented by subclasses)
 	public void draw(SpriteBatch batch) {
-		
 	}
 	
-	//Entity movements
+	// Handle entity movements (to be implemented by subclasses)
 	public void movement() {
 	}
 	
-	//abstract void
+	// Abstract method to update the entity (must be implemented by subclasses)
 	public abstract void update();
 	
+	// Update the position of the bounding box
 	private void updateBounds() {
-        bounds.setPosition(x, y);
-    }
+		bounds.setPosition(x, y);
+	}
 
-    public Rectangle getBounds() {
-        return bounds;
-    }
+	// Return the bounding box of the entity
+	public Rectangle getBounds() {
+		return bounds;
+	}
 	
+	// Dispose of resources used by the entity
 	public void dispose() {
 		this.dispose();
 	}
-	
-	
 }
-
-

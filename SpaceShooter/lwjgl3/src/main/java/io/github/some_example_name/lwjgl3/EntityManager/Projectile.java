@@ -1,65 +1,60 @@
 package io.github.some_example_name.lwjgl3.EntityManager;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Timer;
 
+// Class representing a projectile entity in the game
+public class Projectile extends Entity {
 
-public class Projectile extends Entity{
+	private int projectileDamage; // Damage dealt by the projectile
+	private Rectangle bounds; // Rectangle used for collision detection
 
-	private int projectileDamage;
-	private Rectangle bounds;
-	
+	// Default constructor
 	public Projectile() {
-		
 	}
-	
-	//Create Projectile Entity
-	public Projectile(float x, float y,Color color, float speed, int damage) {
-		super(x,y,color,speed,0);
-		//set damage of projectile
-		this.projectileDamage = damage;
-		
+
+	// Constructor to create a projectile entity with specified properties
+	public Projectile(float x, float y, Color color, float speed, int damage) {
+		super(x, y, color, speed, 0); // Call the parent class constructor
+		this.projectileDamage = damage; // Set the damage of the projectile
 	}
-	
-	//Draw Projectile
+
+	// Method to draw the projectile on the screen
 	public void draw(ShapeRenderer shape) {
-		shape.begin(ShapeRenderer.ShapeType.Filled);
-			shape.setColor(this.getColor());
-			shape.rect(this.getX(), this.getY(), 10, 30);
-		shape.end();
-		//Create Rectangle to detect collisions
-        bounds = new Rectangle(this.getX(), this.getY(), 10, 30);
+		shape.begin(ShapeRenderer.ShapeType.Filled); // Begin shape rendering
+		shape.setColor(this.getColor()); // Set the color of the projectile
+		shape.rect(this.getX(), this.getY(), 10, 30); // Draw the projectile as a rectangle
+		shape.end(); // End shape rendering
+
+		// Create a rectangle for collision detection
+		bounds = new Rectangle(this.getX(), this.getY(), 10, 30);
 	}
-	
-	//Return Rectangle
-	public Rectangle getBounds(){
+
+	// Method to return the collision bounds of the projectile
+	public Rectangle getBounds() {
 		return bounds;
 	}
-	
-	//Return ProjectileDamage
+
+	// Method to get the damage dealt by the projectile
 	public int getProjectileDamage() {
 		return projectileDamage;
 	}
 
-	//Set ProjectileDamage
+	// Method to set the damage dealt by the projectile
 	public void setProjectileDamage(int projectileDamage) {
 		this.projectileDamage = projectileDamage;
 	}
-	
-	//Projectile Movement
-	public void movement() {
-		
-	}
-	
-	//Projectile Update
-	public void update() {
 
+	// Method to handle projectile movement 
+	public void movement() {
 	}
-	
-	//Projectile Dispose
+
+	// Method to update the projectile's state 
+	public void update() {
+	}
+
+	// Method to dispose of the projectile's resources
 	public void dispose() {
 		this.dispose();
 	}
